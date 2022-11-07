@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'top to bottom direction
+left to right direction
+
+hide empty member
+
+note as todoList
+TODO
+==
+Нужна ли ассоциация в связи автобус-сотрудник
+
+end note
+
+remove todoList
+
+
+class Bus {
+    String: model
+    String: numberPlate
+    int: maxPassenger
+    Employee: driver
+    Route: route
+}
+
+class Address {
+    String: street
+    String: apartment
+}
+
+class Employee {
+    String: name
+    String: middleName
+    String: lastName
+'    FIO: fio
+    enum: post
+    double: salary
+    Address: homeAddress
+}
+
+Employee "1" o-- Address
+
+
+Bus "0..1" o-- Employee: driver
+Bus  --> "0..*" Employee: mechanic
+
+'class FIO {
+'}
+
+enum Employee.Post {
+    DRIVER
+    MECHANIC
+}
+
+Employee - Employee.Post
+
+class BusStop {
+    String: name
+    Address: address
+}
+
+BusStop "1" o- Address
+
+class Route {
+    int: routeNumber
+    Set<BusStop>: busStops
+}
+
+Route  --o "1" Bus
+
+Route "2..*" o-- BusStop
+@enduml

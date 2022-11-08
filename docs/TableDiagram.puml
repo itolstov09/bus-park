@@ -1,0 +1,79 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'top to bottom direction
+left to right direction
+
+
+package tables {
+
+    hide empty member
+    hide circle
+
+
+
+    entity "Адрес" as address {
+        * bigint: id <<PK>>
+        * varchar: street
+        * varchar: apartment
+    }
+
+    entity "Автобус" as bus {
+        * bigint: id <<PK>>
+        * varchar: model
+        * varchar: numberPlate
+        * integer: maxPassenger
+        * bigint: driver_id <<FK>>
+        * bigint: route_id <<FK>>
+    }
+
+    entity "Сотрудник" as employee {
+        * bigint: id <<PK>>
+        * varchar: name
+        * varchar: middleName
+        * varchar: lastName
+        * varchar: post
+        * double: salary
+        * bigint: home_address_id <<FK>>
+    }
+
+    employee ||-- address: "home address"
+
+
+    bus  |o-- employee: driver
+
+    entity "Автобус_механик" as bus_mechanic {
+        * bigint: bus_id <<PK>> <<FK>>
+        * bigint: mechanic_id <<PK>> <<FK>>
+    }
+
+    bus_mechanic }-- bus
+    employee --{ bus_mechanic: mechanic_id
+
+
+
+    entity "Остановка" as busstop {
+        * bigint: id <<PK>>
+        * varchar: name
+        * bigint: address_id <<FK>> <<UNIQUE>>
+    }
+
+    busstop ||- address: bus_stop_address
+
+    entity "Маршрут" as route {
+        * bigint: id <<PK>>
+        * int: routeNumber
+        * bigint: bus_stop_id <<FK>>
+    }
+    route  -o|  bus
+
+    entity "Маршрут_остановка" as route_busstop {
+        * bigint: route_id <<PK>> <<FK>>
+        * bigint: bus_stop_id <<PK>> <<FK>>
+
+    }
+    route_busstop }- route
+    busstop -{ route_busstop
+
+}
+@enduml

@@ -32,6 +32,7 @@ public class Employee {
     private Address homeAddress;
 
     @NonNull
+    @Enumerated(EnumType.STRING)
     private Post post;
 
     public void setHomeAddress(Address homeAddress) {

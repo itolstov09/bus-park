@@ -21,9 +21,9 @@ package tables {
     entity "Автобус" as bus {
         * bigint: id <<PK>>
         * varchar: model
-        * varchar: numberPlate
+        * varchar: numberPlate <<UNIQUE>>
         * integer: maxPassenger
-        * bigint: driver_id <<FK>>
+        * bigint: driver_id <<FK>> <<UNIQUE>>
         * bigint: route_id <<FK>>
     }
 
@@ -34,6 +34,8 @@ package tables {
         * varchar: lastName
         * varchar: post
         * double: salary
+        * varchar: driver_license_id
+        * varchar: driver_license_categories
         * bigint: home_address_id <<FK>>
     }
 

@@ -39,6 +39,13 @@ class Employee {
     Address: homeAddress
 }
 
+class DriverLicense {
+    String: ID
+    String: categories
+}
+
+Employee "0..1" *-- DriverLicense
+
 Employee "1" o-- Address
 
 

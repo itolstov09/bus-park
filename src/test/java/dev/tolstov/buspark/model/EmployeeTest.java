@@ -1,7 +1,9 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.exception.EmployeeException;
+import dev.tolstov.buspark.service.EmployeeService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -9,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EmployeeTest extends EntityTest {
+
+    @Autowired
+    EmployeeService employeeService;
 
 
     @Test
@@ -20,16 +25,31 @@ public class EmployeeTest extends EntityTest {
         );
     }
 
+//    @Test
+//    void testSaveEmployeeWithDriverPostAndWithoutLicenseThrowException() {
+//        assertThrows(EmployeeException.class,
+//                () -> {
+//                    Employee employee = new Employee(
+//                            "name",
+//                            "lastName", 1.2,
+//                            new Address("street", "1"),
+//                            Employee.Post.DRIVER);
+//                    testEntityService.saveEmployee(employee);
+//                });
+//    }
+
     @Test
-    void testSaveEmployeeWithDriverPostAndWithoutLicenseThrowException() {
+    void whenSaveDriverWithoutLicense_thenThrowsException() {
         assertThrows(EmployeeException.class,
                 () -> {
-                    Employee employee = new Employee(
-                            "name",
-                            "lastName", 1.2,
-                            new Address("street", "1"),
+                    Address address = new Address("s", "1");
+                    addressRepository.save(address);
+                    Employee newEmployee = new Employee(
+                            "N",
+                            "L",
+                            12.2,
                             Employee.Post.DRIVER);
-                    testEntityService.saveEmployee(employee);
+                    employeeService.save(newEmployee, address, null);
                 });
     }
 }

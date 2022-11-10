@@ -1,20 +1,13 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.TestEntityService;
-import dev.tolstov.buspark.exception.EmployeeException;
-import dev.tolstov.buspark.model.*;
 import dev.tolstov.buspark.repository.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
-import java.util.Objects;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public abstract class EntityTest {
@@ -57,11 +50,14 @@ public abstract class EntityTest {
     private void storeEntities() {
         Address street = new Address("street", "15");
         addressRepository.save(street);
-        Employee dmitry = new Employee("Dmitry", "Ivanoff", 12000.0, street, Employee.Post.MECHANIC);
+        Employee dmitry = new Employee("Dmitry", "Ivanoff", 12000.0, Employee.Post.MECHANIC);
+        dmitry.setHomeAddress(street);
         employeeRepository.save(dmitry);
-        Employee mechanic2 = new Employee("Mechanic2", "Ivanoff", 12000.0, street, Employee.Post.MECHANIC);
+        Employee mechanic2 = new Employee("Mechanic2", "Ivanoff", 12000.0, Employee.Post.MECHANIC);
+        mechanic2.setHomeAddress(street);
         employeeRepository.save(mechanic2);
-        Employee mechanic3 = new Employee("Mechanic3", "Ivanoff", 12000.0, street, Employee.Post.MECHANIC);
+        Employee mechanic3 = new Employee("Mechanic3", "Ivanoff", 12000.0, Employee.Post.MECHANIC);
+        mechanic3.setHomeAddress(street);
         employeeRepository.save(mechanic3);
 
         DriverLicense ivanDL = new DriverLicense("asdf1234", "D");
@@ -69,13 +65,14 @@ public abstract class EntityTest {
                 "Ivan",
                 "Ivanoff",
                 15000.0,
-                street,
                 Employee.Post.DRIVER);
+        ivan.setHomeAddress(street);
         ivan.setDriverLicense(ivanDL);
         employeeRepository.save(ivan);
 
         DriverLicense driverLicense = new DriverLicense("sdafsda1415", "D");
-        Employee driver2 = new Employee("driver2", "lastName", 15000.0, street, Employee.Post.DRIVER);
+        Employee driver2 = new Employee("driver2", "lastName", 15000.0, Employee.Post.DRIVER);
+        driver2.setHomeAddress(street);
         driver2.setDriverLicense(driverLicense);
         employeeRepository.save(driver2);
 

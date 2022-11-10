@@ -28,7 +28,6 @@ public class Employee {
     @Getter @Setter
     private Double salary;
 
-    @NonNull
     @Getter @Setter
     @ManyToOne(optional = false)
     @JoinColumn(name = "home_address_ID",

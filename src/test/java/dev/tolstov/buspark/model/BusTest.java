@@ -18,10 +18,10 @@ public class BusTest extends EntityTest {
         DataIntegrityViolationException violationException = assertThrows(
                 DataIntegrityViolationException.class,
                 () -> {
-                    Bus bus = busRepository.findAll().get(0);
+                    Bus bus = busService.findAll().get(0);
                     String numberPlate = bus.getNumberPlate();
                     Bus newBus = new Bus("model", numberPlate);
-                    busRepository.save(newBus);
+                    busService.save(newBus);
                 }
         );
         assertTrue(
@@ -33,9 +33,9 @@ public class BusTest extends EntityTest {
     void testAddEmployeeWithoutLicenseCannotBeBusDriver() {
         EmployeeException employeeException = assertThrows(EmployeeException.class,
                 () -> {
-                    Employee employee = employeeRepository.findAll().get(0);
+                    Employee employee = employeeService.findAll().get(0);
                     employee.setDriverLicense(null);
-                    Bus bus = busRepository.findAll().get(0);
+                    Bus bus = busService.findAll().get(0);
                     bus.setDriver(employee);
                 });
         assertTrue(employeeException.getMessage().endsWith("Reason: don't have a license!"));
@@ -46,11 +46,11 @@ public class BusTest extends EntityTest {
         DataIntegrityViolationException violationException = assertThrows(
                 DataIntegrityViolationException.class,
                 () -> {
-                    Bus bus = busRepository.findAll().get(0);
+                    Bus bus = busService.findAll().get(0);
                     Employee driver = bus.getDriver();
                     Bus newBus = new Bus("model", "np");
                     newBus.setDriver(driver);
-                    busRepository.save(newBus);
+                    busService.save(newBus);
                 }
         );
         assertTrue(

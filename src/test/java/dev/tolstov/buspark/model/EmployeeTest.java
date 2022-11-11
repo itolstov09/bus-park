@@ -18,7 +18,7 @@ public class EmployeeTest extends EntityTest {
 
     @Test
     void testTwoEmployeesCanHaveSameAddress() {
-        List<Employee> employeeList = employeeRepository.findAll();
+        List<Employee> employeeList = employeeService.findAll();
         assertEquals(
                 employeeList.get(0).getHomeAddress().getStreet(),
                 employeeList.get(1).getHomeAddress().getStreet()
@@ -43,7 +43,7 @@ public class EmployeeTest extends EntityTest {
         assertThrows(EmployeeException.class,
                 () -> {
                     Address address = new Address("s", "1");
-                    addressRepository.save(address);
+                    addressService.save(address);
                     Employee newEmployee = new Employee(
                             "N",
                             "L",

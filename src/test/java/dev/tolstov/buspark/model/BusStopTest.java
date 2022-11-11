@@ -13,13 +13,13 @@ public class BusStopTest extends EntityTest {
 
     @Test
     void testAddExistingBusStopAddressToNewBusStopThrowsException() {
-        BusStop busStop = busStopRepository.findAll().get(0);
+        BusStop busStop = busStopService.findAll().get(0);
         Address busStopAddress = busStop.getAddress();
 
-        BusStop anotherBusStop = new BusStop("Another bus stop", busStopAddress);
+        BusStop anotherBusStop = new BusStop("Another bus stop");
         DataIntegrityViolationException violationException = assertThrows(
                 DataIntegrityViolationException.class,
-                () -> busStopRepository.save(anotherBusStop)
+                () -> busStopService.save(anotherBusStop, busStopAddress)
         );
         assertTrue(
                 Objects.requireNonNull(violationException.getRootCause())

@@ -36,4 +36,13 @@ public class AddressService {
     public void deleteById(Long addressId) {
         addressRepository.deleteById(addressId);
     }
+
+
+    public void deleteAll() {
+        addressRepository.deleteAll();
+    }
+
+    public List<Address> saveAll(Iterable<Address> addressList) {
+        return addressRepository.saveAll(addressList);
+    }
 }

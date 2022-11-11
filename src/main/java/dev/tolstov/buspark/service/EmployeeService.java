@@ -50,5 +50,13 @@ public class EmployeeService {
     public void deleteById(Long employeeId) {
         employeeRepository.deleteById(employeeId);
     }
+
+    public void deleteAll() {
+        employeeRepository.deleteAll();
+    }
+
+    public Employee findFirstByPost(Employee.Post post) {
+        return employeeRepository.findFirstByPost(post);
+    }
 }
 

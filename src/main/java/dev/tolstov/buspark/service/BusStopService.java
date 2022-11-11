@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
+import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.repository.BusStopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,11 @@ public class BusStopService {
     BusStopRepository busStopRepository;
 
 
-    public BusStop save(BusStop newBusStop) {
+    public BusStop save(BusStop newBusStop, Address address) {
+        if (address == null) {
+            throw new IllegalArgumentException("Bus stop address must be not null");
+        }
+        newBusStop.setAddress(address);
         return busStopRepository.save(newBusStop);
     }
 
@@ -39,5 +44,7 @@ public class BusStopService {
     }
 
 
-
+    public void deleteAll() {
+        busStopRepository.deleteAll();
+    }
 }

@@ -2,11 +2,13 @@ package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Bus;
+import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.BusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BusService {
@@ -17,6 +19,18 @@ public class BusService {
     public Bus save(Bus newBus) {
         return busRepository.save(newBus);
     }
+
+    public Bus save(Bus newBus, Employee driver) {
+        newBus.setDriver(driver);
+        return busRepository.save(newBus);
+    }
+
+    public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
+        newBus.setDriver(driver);
+        newBus.setMechanics(mechanics);
+        return busRepository.save(newBus);
+    }
+
 
     public List<Bus> findAll() {
         return busRepository.findAll();
@@ -38,4 +52,11 @@ public class BusService {
         busRepository.deleteById(busId);
     }
 
+    public void deleteAll() {
+        busRepository.deleteAll();
+    }
+
+    public List<Bus> findBusesByMechanicId(Long mechanicId) {
+        return busRepository.findBusesByMechanicId(mechanicId);
+    }
 }

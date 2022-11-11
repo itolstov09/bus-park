@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
+import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Bus;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.BusRepository;
@@ -16,17 +17,17 @@ public class BusService {
     BusRepository busRepository;
 
 
-    public Bus save(Bus newBus) {
-        return busRepository.save(newBus);
+    public Bus save(Bus bus) {
+        return busRepository.save(bus);
     }
 
     public Bus save(Bus newBus, Employee driver) {
-        newBus.setDriver(driver);
+        setDriver(newBus, driver);
         return busRepository.save(newBus);
     }
 
     public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
-        newBus.setDriver(driver);
+        setDriver(newBus, driver);
         newBus.setMechanics(mechanics);
         return busRepository.save(newBus);
     }
@@ -58,5 +59,30 @@ public class BusService {
 
     public List<Bus> findBusesByMechanicId(Long mechanicId) {
         return busRepository.findBusesByMechanicId(mechanicId);
+    }
+
+
+    public void setDriver(Bus bus, Employee employee) {
+        driverVerification(employee);
+        bus.setDriver(employee);
+    }
+
+
+    // TODO перевести в boolean когда потребуется проверка должности механика
+    // TODO вынести в другой метод: Добавить удаление обслуживаемых автобусов, так как сотрудник больше не является механиком
+    private void driverVerification(Employee employee) {
+        if (!employee.isCanBeDriver()) {
+            throw new EmployeeException(
+                    String.format(
+                            "Employee %s can not be a driver! Reason: don't have a license!",
+                            employee.getName() + employee.getLastName()
+                    )
+            );
+        }
+
+        Bus busByDriver = busRepository.findBusByDriver(employee);
+        if (busByDriver != null) {
+            throw new EmployeeException(String.format("Driver already drives bus %s", busByDriver.getNumberPlate()));
+        }
     }
 }

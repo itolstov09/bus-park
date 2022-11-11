@@ -6,8 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BusTest extends EntityTest {
     // Тесты для автобуса
@@ -36,13 +35,13 @@ public class BusTest extends EntityTest {
                     Employee employee = employeeService.findAll().get(0);
                     employee.setDriverLicense(null);
                     Bus bus = busService.findAll().get(0);
-                    bus.setDriver(employee);
+                    busService.setDriver(bus, employee);
                 });
         assertTrue(employeeException.getMessage().endsWith("Reason: don't have a license!"));
     }
 
     @Test
-    void testBusDriverMustBeUnique() {
+    void testBusDriverUniqueConstraint() {
         DataIntegrityViolationException violationException = assertThrows(
                 DataIntegrityViolationException.class,
                 () -> {
@@ -58,6 +57,20 @@ public class BusTest extends EntityTest {
                         .getMessage().contains("bus_driver_id_key") );
     }
 
+    @Test
+    void whenSetDriverWhosAlreadyDrivesBus_thenThrowsException() {
+        EmployeeException employeeException = assertThrows(
+                EmployeeException.class,
+                () -> {
+                    Bus bus = busService.findAll().get(0);
+                    Employee driver = bus.getDriver();
+                    Bus newBus = new Bus("model", "np");
+                    busService.setDriver(newBus, driver);
+                }
+        );
+        assertTrue( employeeException.getMessage().startsWith("Driver already drives bus"));
+    }
+
     //      одним автобусом могут заниматься несколько механиков
     @Test
     void testOneBusCanHaveFewMechanics() {
@@ -68,5 +81,20 @@ public class BusTest extends EntityTest {
     @Test
     void testOneMechanicCanWorkOnFewBuses() {
         testEntityService.testOneMechanicCanWorkOnFewBuses();
+    }
+
+    @Test
+    void givenBusWithDriver_whenSetDriver_thenDriverChanged() {
+        //given
+        Employee mechanic = employeeService.findFirstByPost(Employee.Post.MECHANIC);
+        DriverLicense driverLicense = new DriverLicense("123", "D");
+        mechanic.setDriverLicense(driverLicense);
+        Bus bus = busService.findAll().get(0);
+        //when
+        Employee oldDriver = bus.getDriver();
+        busService.setDriver(bus, mechanic);
+        //then
+        Bus busById = busService.findById(bus.getId());
+        assertNotEquals(busById.getDriver(), oldDriver);
     }
 }

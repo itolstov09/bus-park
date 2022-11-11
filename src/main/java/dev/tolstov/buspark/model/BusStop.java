@@ -24,12 +24,12 @@ public class BusStop {
     @Column(nullable = false)
     private String name;
 
-    @NonNull
     @Getter @Setter
-    @OneToOne //(cascade = CascadeType.PERSIST)
+    @OneToOne
     @JoinColumn(
             name = "address_id",
-            foreignKey = @ForeignKey(name = "bus_stop_address_id_fkey")
+            foreignKey = @ForeignKey(name = "bus_stop_address_id_fkey"),
+            nullable = false
     )
     private Address address;
 }

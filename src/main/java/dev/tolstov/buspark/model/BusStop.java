@@ -7,14 +7,19 @@ import javax.persistence.*;
 @Entity
 @Table(
         name = "bus_stop",
-        uniqueConstraints = { @UniqueConstraint(
-                                    name = "bus_stop_address_id_key",
-                                    columnNames = {"address_id"})
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "bus_stop_address_id_key",
+                        columnNames = {"address_id"}),
+                @UniqueConstraint(
+                        name = "bus_stop_name_key",
+                        columnNames = {"name"})
         }
 )
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class BusStop {
+    @Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

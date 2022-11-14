@@ -31,7 +31,7 @@ public class BusStopService {
     public BusStop findById(Long busStopId) {
         return busStopRepository.findById(busStopId)
                 .orElseThrow(
-                        () -> new BPEntityNotFoundException(String.format("Bus stop with id \"%s\" not found!", busStopId))
+                        () -> new BPEntityNotFoundException( BusStop.class.getSimpleName(), busStopId)
                 );
     }
 

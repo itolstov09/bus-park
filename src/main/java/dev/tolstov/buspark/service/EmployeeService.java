@@ -39,7 +39,8 @@ public class EmployeeService {
 
     public Employee findById(Long employeeId) {
         return employeeRepository.findById(employeeId).orElseThrow(
-                () -> new BPEntityNotFoundException(String.format("Employee with id \"%d\" not found!", employeeId))
+                () -> new BPEntityNotFoundException(
+                        Employee.class.getSimpleName(), employeeId)
         );
     }
 

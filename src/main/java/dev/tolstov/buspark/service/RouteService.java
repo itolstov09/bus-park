@@ -33,7 +33,8 @@ public class RouteService {
     public Route findById(Long routeId) {
         return routeRepository.findById(routeId)
                 .orElseThrow(
-                    () -> new BPEntityNotFoundException(String.format("Route with id \"%s\" not found!", routeId))
+                    () -> new BPEntityNotFoundException(
+                            Route.class.getSimpleName(), routeId)
                 );
     }
 

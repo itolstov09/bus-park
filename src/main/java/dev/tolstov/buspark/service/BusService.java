@@ -40,7 +40,8 @@ public class BusService {
     public Bus findById(Long busId) {
         return busRepository.findById(busId)
                 .orElseThrow(
-                        () -> new BPEntityNotFoundException(String.format("Bus with id \"%s\" not found!", busId))
+                        () -> new BPEntityNotFoundException(
+                                Bus.class.getSimpleName(), busId)
                 );
     }
 

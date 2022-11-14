@@ -25,8 +25,7 @@ public class AddressService {
 
     public Address findById(Long addressId) {
         return addressRepository.findById(addressId).orElseThrow(
-                () -> new BPEntityNotFoundException(String.format("Address with id \"%d\" not found!", addressId))
-        );
+                () -> new BPEntityNotFoundException(Address.class.getSimpleName(), addressId));
     }
 
     public Address update(Address addressInfo) {

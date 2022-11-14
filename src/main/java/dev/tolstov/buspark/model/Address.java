@@ -21,9 +21,9 @@ public class Address {
 
     @Setter @Getter
     @Column(name = "apartment_number")
-    private String apartmentNumber;
+    private Integer apartmentNumber;
 
-    public Address(@NonNull String street, String apartmentNumber) {
+    public Address(@NonNull String street, Integer apartmentNumber) {
         this.street = street;
         this.apartmentNumber = apartmentNumber;
     }

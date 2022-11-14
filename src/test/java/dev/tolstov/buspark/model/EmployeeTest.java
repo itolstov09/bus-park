@@ -7,8 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EmployeeTest extends EntityTest {
 
@@ -38,5 +37,24 @@ public class EmployeeTest extends EntityTest {
                             Employee.Post.DRIVER);
                     employeeService.save(newEmployee, address, null);
                 });
+    }
+
+    /**
+     * При сохранении сотрудника в адресе должен быть указан номер квартиры
+     */
+    @Test
+    void whenSaveEmployeeWithoutApartmentNumber_thenThrowsException(){
+        EmployeeException employeeException = assertThrows(EmployeeException.class,
+                () -> {
+                    Address address = new Address("s", null);
+                    addressService.save(address);
+                    Employee newEmployee = new Employee(
+                            "N",
+                            "L",
+                            12.2,
+                            Employee.Post.MECHANIC);
+                    employeeService.save(newEmployee, address);
+                });
+        assertEquals("Employee home address must have apartment number!", employeeException.getMessage());
     }
 }

@@ -1,5 +1,6 @@
 package dev.tolstov.buspark.model;
 
+import dev.tolstov.buspark.exception.EmployeeException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Employee {
     @Getter @Setter
     private Double salary;
 
-    @Getter @Setter
+    @Getter
     @ManyToOne(optional = false)
     @JoinColumn(name = "home_address_ID",
         foreignKey = @ForeignKey(name = "employee_home_address_ID_fkey"))
@@ -43,6 +44,17 @@ public class Employee {
     @Getter
     @Setter
     private DriverLicense driverLicense;
+
+    public void setHomeAddress(Address homeAddress) {
+        homeAddressCheck(homeAddress);
+        this.homeAddress = homeAddress;
+    }
+
+    private void homeAddressCheck(Address homeAddress) {
+        if (homeAddress.getApartmentNumber() == null) {
+            throw new EmployeeException("Employee home address must have apartment number!");
+        }
+    }
 
     public boolean isCanBeDriver() {
         return driverLicense != null;

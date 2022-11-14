@@ -25,24 +25,11 @@ public class EmployeeTest extends EntityTest {
         );
     }
 
-//    @Test
-//    void testSaveEmployeeWithDriverPostAndWithoutLicenseThrowException() {
-//        assertThrows(EmployeeException.class,
-//                () -> {
-//                    Employee employee = new Employee(
-//                            "name",
-//                            "lastName", 1.2,
-//                            new Address("street", "1"),
-//                            Employee.Post.DRIVER);
-//                    testEntityService.saveEmployee(employee);
-//                });
-//    }
-
     @Test
     void whenSaveDriverWithoutLicense_thenThrowsException() {
         assertThrows(EmployeeException.class,
                 () -> {
-                    Address address = new Address("s", "1");
+                    Address address = new Address("s", 1);
                     addressService.save(address);
                     Employee newEmployee = new Employee(
                             "N",

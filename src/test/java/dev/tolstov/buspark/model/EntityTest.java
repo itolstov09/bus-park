@@ -1,7 +1,6 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.TestEntityService;
-import dev.tolstov.buspark.repository.*;
 import dev.tolstov.buspark.service.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +50,7 @@ public abstract class EntityTest {
     }
 
     private void storeEntities() {
-        Address street = new Address("street", "15");
+        Address street = new Address("street", 15);
         addressService.save(street);
 
         Employee dmitry = new Employee("Dmitry", "Ivanoff", 12000.0, Employee.Post.MECHANIC);

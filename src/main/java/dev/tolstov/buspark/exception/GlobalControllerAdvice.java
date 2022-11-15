@@ -24,4 +24,11 @@ public class GlobalControllerAdvice {
     String entityExistsException(EntityExistsException exception) {
         return exception.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmployeeException.class)
+    String employeeException(EmployeeException exception) {
+        return exception.getMessage();
+    }
 }

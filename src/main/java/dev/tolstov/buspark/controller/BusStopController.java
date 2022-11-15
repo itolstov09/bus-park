@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("busStop")
+@RequestMapping("api/v1/busStops")
 public class BusStopController {
 
     @Autowired

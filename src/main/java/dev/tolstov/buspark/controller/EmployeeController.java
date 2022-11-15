@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("employee")
+@RequestMapping("api/v1/employees")
 public class EmployeeController {
 
     @Autowired

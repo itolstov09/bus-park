@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class DriverLicense {
     @NonNull
+    @Column(name = "license_id")
     private String licenseID;
     //TODO переделать setter. сделать возможность передавать список категорий, который потом будет переводится в стрoку
     @NonNull

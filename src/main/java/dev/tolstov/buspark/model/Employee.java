@@ -6,6 +6,9 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "employee_driver_license_id_key", columnNames = {"license_id"})
+})
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Employee {
@@ -40,9 +43,9 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Post post;
 
-    @Embedded
     @Getter
     @Setter
+    @Embedded
     private DriverLicense driverLicense;
 
     public void setHomeAddress(Address homeAddress) {

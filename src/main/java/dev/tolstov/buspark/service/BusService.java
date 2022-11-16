@@ -5,6 +5,7 @@ import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Bus;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.BusRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,13 +46,15 @@ public class BusService {
                 );
     }
 
-    public Bus update(Bus busInfo) {
-        // TODO возможно стоит сделать проверку id != null, ведь если это так, то это не обновление, а создание
-        return busRepository.save(busInfo);
+    public Bus update(Long id, Bus busInfo) {
+        Bus byId = findById(id);
+        BeanUtils.copyProperties(busInfo, byId);
+        return busRepository.save(byId);
     }
 
     public void deleteById(Long busId) {
-        busRepository.deleteById(busId);
+        Bus bus = findById(busId);
+        busRepository.delete(bus);
     }
 
     public void deleteAll() {

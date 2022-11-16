@@ -41,6 +41,14 @@ public class DBRunner {
                     Employee.Post.DRIVER);
             employeeService.save(ivan, street, ivanDL);
 
+            DriverLicense driverLicense1 = new DriverLicense("asdf1234555", "D");
+            Employee egor = new Employee(
+                    "Egor",
+                    "Ivanoff",
+                    15000.0,
+                    Employee.Post.DRIVER);
+            employeeService.save(egor, street, driverLicense1);
+
             DriverLicense driverLicense = new DriverLicense("sdafsda1415", "D");
             Employee driver2 = new Employee("driver2", "lastName", 15000.0, Employee.Post.DRIVER);
             employeeService.save(driver2, street, driverLicense);
@@ -73,11 +81,11 @@ public class DBRunner {
             routeService.save(route2);
 //
 //
-//            Bus paz = new Bus("PAZ", "125ASD02");
-//            busService.save(paz, ivan, Set.of(dmitry, mechanic3));
-//
-//            Bus paz2 = new Bus("PAZ", "145NUM02");
-//            busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
+            Bus paz = new Bus("PAZ", "125ASD02");
+            busService.save(paz, ivan, Set.of(dmitry, mechanic3));
+
+            Bus paz2 = new Bus("PAZ", "145NUM02");
+            busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
         };
     }
 }

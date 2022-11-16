@@ -6,6 +6,11 @@ import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(name = "route_route_number_key", columnNames = {"route_number"})
+        }
+)
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor

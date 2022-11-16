@@ -27,7 +27,9 @@ public class BusController {
         return busService.findById(id);
     }
 
+
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Bus save(@RequestBody Bus newBus) {
         return busService.save(newBus);
     }

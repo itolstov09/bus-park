@@ -26,6 +26,7 @@ public class RouteController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Route save(@RequestBody Route route) {
         return routeService.save(route);
     }

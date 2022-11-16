@@ -34,6 +34,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/driver")
+    @ResponseStatus(HttpStatus.CREATED)
     public Employee saveDriver(@RequestBody Employee employee) {
         Address homeAddress = employee.getHomeAddress();
         DriverLicense driverLicense = employee.getDriverLicense();
@@ -41,6 +42,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/mechanic")
+    @ResponseStatus(HttpStatus.CREATED)
     public Employee saveMechanic(@RequestBody EmployeeMechanicDTO dto) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);

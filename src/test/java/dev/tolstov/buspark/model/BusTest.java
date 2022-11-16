@@ -4,6 +4,7 @@ import dev.tolstov.buspark.exception.EmployeeException;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import javax.persistence.EntityExistsException;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +28,23 @@ public class BusTest extends EntityTest {
                 Objects.requireNonNull(violationException.getRootCause())
                         .getMessage().contains("bus_number_plate_key") );
     }
+
+    //todo доделать или выкинуть к моменту использования spring validation
+    /**
+     * попытка сохранить автобус с уже существующим номером вызовет исключение
+     */
+//    @Test
+//    void test() {
+//        assertThrows(EntityExistsException.class, () -> {
+//                Bus busFromDB = busService.findAll().get(0);
+//                String numberPlate = busFromDB.getNumberPlate();
+//                Bus newBus = new Bus("model", numberPlate);
+//                busService.save(newBus);
+//                }
+//        );
+//    }
+
+
     //      * сотрудника без водительского удостоверения нельзя указать как водителя
     @Test
     void testAddEmployeeWithoutLicenseCannotBeBusDriver() {

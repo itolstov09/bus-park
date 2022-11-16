@@ -64,7 +64,7 @@ package tables {
 
     entity "Маршрут" as route {
         * bigint: id <<PK>>
-        * int: routeNumber
+        * int: routeNumber <<UNIQUE>>
         * bigint: bus_stop_id <<FK>>
     }
     route  -o|  bus

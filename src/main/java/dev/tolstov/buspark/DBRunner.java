@@ -60,17 +60,17 @@ public class DBRunner {
             busStopService.save(busStop2, busStop2Address);
             busStopService.save(busStop3, busStop3Address);
 
-//            Route route1 = new Route(1);
-//            route1.addBusStop(busStopService.findAll().get(0));
-//            route1.addBusStop(busStopService.findAll().get(1));
-//            routeService.save(route1);
-//
-//            BusStop busStop4 = new BusStop("Bus stop 4");
-//            busStopService.save(busStop4, busStop4Address);
-//            Route route2 = new Route(51);
-//            route2.addBusStop(busStop4);
-//            route2.addBusStop(busStopService.findAll().get(0));
-//            routeService.save(route2);
+            Route route1 = new Route(1);
+            route1.addBusStop(busStopService.findAll().get(0));
+            route1.addBusStop(busStopService.findAll().get(1));
+            routeService.save(route1);
+
+            BusStop busStop4 = new BusStop("Bus stop 4");
+            busStopService.save(busStop4, busStop4Address);
+            Route route2 = new Route(51);
+            route2.addBusStop(busStop4);
+            route2.addBusStop(busStopService.findAll().get(0));
+            routeService.save(route2);
 //
 //
 //            Bus paz = new Bus("PAZ", "125ASD02");

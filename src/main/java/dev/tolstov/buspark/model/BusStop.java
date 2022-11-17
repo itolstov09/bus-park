@@ -3,6 +3,8 @@ package dev.tolstov.buspark.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(
@@ -25,10 +27,12 @@ public class BusStop {
     private Long id;
 
     @NonNull
+    @NotNull @NotBlank
     @Getter @Setter
     @Column(nullable = false)
     private String name;
 
+    @NotNull
     @Getter @Setter
     @OneToOne
     @JoinColumn(

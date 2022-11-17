@@ -20,16 +20,18 @@ public class BusStopService {
     @Autowired
     AddressService addressService;
 
+    @Autowired
+    ValidationService validationService;
+
 
     public BusStop save(BusStop newBusStop, Address address) {
-        if (address == null) {
-            throw new IllegalArgumentException("Bus stop address must be not null");
-        }
+        newBusStop.setAddress(address);
+        validationService.busStopValidation(newBusStop);
         if (busStopRepository.existsByName(newBusStop.getName())) {
             throw new EntityExistsException(String.format("Bus stop with name \"%s\" exists!", newBusStop.getName()));
         }
+
         addressService.save(address);
-        newBusStop.setAddress(address);
         return busStopRepository.save(newBusStop);
     }
 
@@ -52,9 +54,6 @@ public class BusStopService {
 
     public void deleteById(Long busStopId) {
         BusStop byId = findById(busStopId);
-        // удаляем зависимость перед удалением основы
-//        Long addressId = byId.getAddress().getId();
-//        addressService.deleteById(addressId);
         busStopRepository.delete(byId);
     }
 

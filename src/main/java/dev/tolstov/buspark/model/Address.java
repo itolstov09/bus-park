@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -17,10 +18,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // todo добавить NotBlank (вроде как)
     @NonNull
     @Setter @Getter
-    @NotNull
+    @NotNull @NotBlank
     @Column(nullable = false)
     private String street;
 

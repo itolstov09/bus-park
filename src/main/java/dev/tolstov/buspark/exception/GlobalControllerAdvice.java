@@ -62,4 +62,11 @@ public class GlobalControllerAdvice {
     String employeeException(EmployeeException exception) {
         return exception.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BusStopException.class)
+    String busStopException(BusStopException exception) {
+        return exception.getMessage();
+    }
 }

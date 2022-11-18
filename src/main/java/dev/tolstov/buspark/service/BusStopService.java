@@ -4,6 +4,7 @@ import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.repository.BusStopRepository;
+import dev.tolstov.buspark.validation.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class BusStopService {
 
 
     public BusStop save(BusStop newBusStop, Address address) {
+        //todo проверка на null - address
         newBusStop.setAddress(address);
         validationService.busStopValidation(newBusStop);
         if (busStopRepository.existsByName(newBusStop.getName())) {

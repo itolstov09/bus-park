@@ -1,4 +1,4 @@
-package dev.tolstov.buspark.service;
+package dev.tolstov.buspark.validation;
 
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
@@ -50,7 +50,7 @@ public class ValidationService {
         }
     }
 
-    public Map<String, String> getBusStopAddressViolations(Address busStopAddress) {
+    private Map<String, String> getBusStopAddressViolations(Address busStopAddress) {
         boolean isCanBeBusStopAddress = busStopAddress.getApartmentNumber() == null;
         Map<String, String> err = new HashMap<>();
         if (!isCanBeBusStopAddress) {

@@ -1,9 +1,14 @@
 package dev.tolstov.buspark.model;
 
-import dev.tolstov.buspark.exception.EmployeeException;
+import dev.tolstov.buspark.validation.constraints.PostSubset;
+import dev.tolstov.buspark.validation.use_cases.OnDriverSave;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Entity
 @Table(uniqueConstraints = {
@@ -17,10 +22,12 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     @NonNull
     @Getter @Setter
     private String name;
 
+    @NotBlank
     @NonNull
     @Getter @Setter
     private String lastName;
@@ -28,35 +35,33 @@ public class Employee {
     @Getter @Setter
     private String middleName;
 
+    @Positive
     @NonNull
     @Getter @Setter
     private Double salary;
 
+    @Valid
+    @NotNull
     @Getter
     @ManyToOne(optional = false)
     @JoinColumn(name = "home_address_ID",
         foreignKey = @ForeignKey(name = "employee_home_address_ID_fkey"))
     private Address homeAddress;
 
-    @NonNull
-    @Getter @Setter
+    @NotNull
+    @PostSubset(anyOf = {Post.DRIVER, Post.MECHANIC})
+    @NonNull @Getter @Setter
     @Enumerated(EnumType.STRING)
     private Post post;
 
+    @NotNull(groups = OnDriverSave.class)
     @Getter
     @Setter
     @Embedded
     private DriverLicense driverLicense;
 
     public void setHomeAddress(Address homeAddress) {
-        homeAddressCheck(homeAddress);
         this.homeAddress = homeAddress;
-    }
-
-    private void homeAddressCheck(Address homeAddress) {
-        if (homeAddress.getApartmentNumber() == null) {
-            throw new EmployeeException("Employee home address must have apartment number!");
-        }
     }
 
     public boolean isCanBeDriver() {

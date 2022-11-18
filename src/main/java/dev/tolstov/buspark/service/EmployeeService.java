@@ -6,13 +6,18 @@ import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
+import dev.tolstov.buspark.validation.ValidationUseCaseService;
+import dev.tolstov.buspark.validation.use_cases.OnDriverSave;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
+@Validated
 public class EmployeeService {
 
     @Autowired
@@ -20,6 +25,9 @@ public class EmployeeService {
 
     @Autowired
     AddressService addressService;
+
+    @Autowired
+    ValidationUseCaseService validationUseCaseService;
 
 
     public Employee save(Employee newEmployee, Address homeAddress) {
@@ -29,10 +37,20 @@ public class EmployeeService {
         return employeeRepository.save(newEmployee);
     }
 
-    public Employee save(Employee newEmployee, Address homeAddress, DriverLicense license) {
-        if (license == null) {
-            throw new EmployeeException("DriverLicense must be not null");
-        } else if (employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID())) {
+    @Validated(OnDriverSave.class)
+    public Employee save(Employee newEmployee, Address homeAddress, @Valid DriverLicense license) {
+        if (homeAddress == null) {
+            throw new EmployeeException("Employee home address must be not null");
+        }
+
+        validationUseCaseService.employeeAddressValidation(homeAddress);
+        newEmployee.setHomeAddress(homeAddress);
+        //todo driver license validation
+        newEmployee.setDriverLicense(license);
+        validationUseCaseService.driverValidation(newEmployee);
+
+
+        if (employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID())) {
             throw new EmployeeException("Cannot save driver with exist driver license");
         }
 
@@ -71,5 +89,6 @@ public class EmployeeService {
     public Employee findFirstByPost(Employee.Post post) {
         return employeeRepository.findFirstByPost(post);
     }
+
 }
 

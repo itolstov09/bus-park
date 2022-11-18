@@ -6,17 +6,21 @@ import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.model.EmployeeMechanicDTO;
 import dev.tolstov.buspark.service.EmployeeService;
+import dev.tolstov.buspark.validation.use_cases.OnEmployeeAddressSave;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("api/v1/employees")
+@Validated
 public class EmployeeController {
 
     @Autowired
@@ -35,7 +39,7 @@ public class EmployeeController {
 
     @PostMapping("/driver")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveDriver(@RequestBody Employee employee) {
+    public Employee saveDriver(@RequestBody @Valid Employee employee) {
         Address homeAddress = employee.getHomeAddress();
         DriverLicense driverLicense = employee.getDriverLicense();
         return employeeService.save(employee, homeAddress, driverLicense);
@@ -43,16 +47,12 @@ public class EmployeeController {
 
     @PostMapping("/mechanic")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveMechanic(@RequestBody EmployeeMechanicDTO dto) {
+    @Validated(OnEmployeeAddressSave.class)
+    public Employee saveMechanic(@RequestBody @Valid EmployeeMechanicDTO dto) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);
-        try {
-            Employee.Post post = Employee.Post.valueOf(dto.getPost());
-            // TODO setPost тоже может вызвать исключение. что не есть хорошо
-            employee.setPost(post);
-        } catch (IllegalArgumentException exception) {
-            throw new EmployeeException("Invalid employee post: "+ dto.getPost());
-        }
+        Employee.Post post = Employee.Post.valueOf(dto.getPost());
+        employee.setPost(post);
         Address homeAddress = dto.getHomeAddress();
         return employeeService.save(employee, homeAddress);
     }

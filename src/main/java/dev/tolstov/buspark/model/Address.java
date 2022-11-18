@@ -1,5 +1,6 @@
 package dev.tolstov.buspark.model;
 
+import dev.tolstov.buspark.validation.use_cases.OnEmployeeAddressSave;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -20,10 +21,11 @@ public class Address {
 
     @NonNull
     @Setter @Getter
-    @NotNull @NotBlank
+    @NotBlank
     @Column(nullable = false)
     private String street;
 
+    @NotNull(groups = OnEmployeeAddressSave.class, message = "Employee address must have apartment number")
     @Min(1)
     @Setter @Getter
     @Column(name = "apartment_number")

@@ -4,10 +4,12 @@ import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.model.Route;
 import dev.tolstov.buspark.repository.RouteRepository;
+import dev.tolstov.buspark.validation.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Set;
 
@@ -17,8 +19,18 @@ public class RouteService {
     @Autowired
     RouteRepository routeRepository;
 
+    @Autowired
+    ValidationService validationService;
+
 
     public Route save(Route newRoute) {
+        validationService.routeValidation(newRoute);
+
+        if (routeRepository.existsByRouteNumber(newRoute.getRouteNumber())) {
+            throw new EntityExistsException(
+                    String.format("Route with number %s already exists!", newRoute.getRouteNumber())
+            );
+        }
         return routeRepository.save(newRoute);
     }
 

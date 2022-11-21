@@ -3,6 +3,9 @@ package dev.tolstov.buspark.model;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,11 +24,14 @@ public class Route {
     @Getter
     private Long id;
 
+    @Positive
+    @NotNull
     @NonNull
     @Getter @Setter
     @Column(name = "route_number", nullable = false)
     private Integer routeNumber;
 
+    @NotEmpty(message = "Список остановок у маршрута не должен быть пустым")
     @Getter @Setter
     @ManyToMany
     @JoinTable(

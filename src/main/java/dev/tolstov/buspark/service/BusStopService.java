@@ -26,7 +26,6 @@ public class BusStopService {
 
 
     public BusStop save(BusStop newBusStop, Address address) {
-        //todo проверка на null - address
         newBusStop.setAddress(address);
         validationService.busStopValidation(newBusStop);
         if (busStopRepository.existsByName(newBusStop.getName())) {

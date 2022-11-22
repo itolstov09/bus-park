@@ -1,6 +1,7 @@
-package dev.tolstov.buspark.model;
+package dev.tolstov.buspark.dto;
 
 
+import dev.tolstov.buspark.model.Address;
 import lombok.Data;
 
 import javax.validation.Valid;

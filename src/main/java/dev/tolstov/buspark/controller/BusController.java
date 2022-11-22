@@ -1,7 +1,7 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Bus;
-import dev.tolstov.buspark.model.BusDTO;
+import dev.tolstov.buspark.dto.BusDTO;
 import dev.tolstov.buspark.service.BusService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

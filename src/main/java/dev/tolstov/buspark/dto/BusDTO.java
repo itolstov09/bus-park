@@ -1,4 +1,4 @@
-package dev.tolstov.buspark.model;
+package dev.tolstov.buspark.dto;
 
 import lombok.Data;
 

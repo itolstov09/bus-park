@@ -2,7 +2,7 @@ package dev.tolstov.buspark.validation.constraints;
 
 
 import dev.tolstov.buspark.model.Employee;
-import dev.tolstov.buspark.validation.validators.PostSubSetValidator;
+import dev.tolstov.buspark.validation.constraints.validators.PostSubSetValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

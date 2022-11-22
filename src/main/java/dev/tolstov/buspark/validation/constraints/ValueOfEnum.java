@@ -1,15 +1,13 @@
 package dev.tolstov.buspark.validation.constraints;
 
 
-import dev.tolstov.buspark.validation.validators.ValueOfEnumValidator;
+import dev.tolstov.buspark.validation.constraints.validators.ValueOfEnumValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

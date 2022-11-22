@@ -1,4 +1,4 @@
-package dev.tolstov.buspark.validation.validators;
+package dev.tolstov.buspark.validation.constraints.validators;
 
 
 import dev.tolstov.buspark.validation.constraints.ValueOfEnum;

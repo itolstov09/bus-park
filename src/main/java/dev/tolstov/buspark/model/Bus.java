@@ -4,6 +4,7 @@ import dev.tolstov.buspark.exception.EmployeeException;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,17 +22,21 @@ public class Bus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
-    @Getter @Setter
+    @NotBlank
+    @NonNull @Getter @Setter
     @Column(nullable = false)
     private String model;
 
-    @NonNull
-    @Getter @Setter
+    @NotNull
+    @Pattern(regexp = "[0-9]{3} [A-Z]{2,3} [0-9]{2}", message = "Номер не соответствует формату РК")
+    @NonNull @Getter @Setter
     @Column(name = "number_plate", nullable = false)
     private String numberPlate;
 
-    @Getter @Setter
+    @NotNull
+    @Min(20)
+    @Max(60)
+    @NonNull @Getter @Setter
     @Column(name = "max_passenger")
     private Integer maxPassenger;
 

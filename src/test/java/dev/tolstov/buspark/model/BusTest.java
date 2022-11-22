@@ -20,7 +20,7 @@ public class BusTest extends EntityTest {
                 () -> {
                     Bus bus = busService.findAll().get(0);
                     String numberPlate = bus.getNumberPlate();
-                    Bus newBus = new Bus("model", numberPlate);
+                    Bus newBus = new Bus("model", numberPlate, 55);
                     busService.save(newBus);
                 }
         );
@@ -65,7 +65,7 @@ public class BusTest extends EntityTest {
                 () -> {
                     Bus bus = busService.findAll().get(0);
                     Employee driver = bus.getDriver();
-                    Bus newBus = new Bus("model", "np");
+                    Bus newBus = new Bus("model", "np", 56);
                     newBus.setDriver(driver);
                     busService.save(newBus);
                 }
@@ -82,7 +82,7 @@ public class BusTest extends EntityTest {
                 () -> {
                     Bus bus = busService.findAll().get(0);
                     Employee driver = bus.getDriver();
-                    Bus newBus = new Bus("model", "np");
+                    Bus newBus = new Bus("model", "np", 57);
                     busService.setDriver(newBus, driver);
                 }
         );

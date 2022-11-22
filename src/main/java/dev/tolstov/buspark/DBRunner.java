@@ -81,10 +81,10 @@ public class DBRunner {
             routeService.save(route2);
 //
 //
-            Bus paz = new Bus("PAZ", "125ASD02");
+            Bus paz = new Bus("PAZ", "125 ASD 02", 20);
             busService.save(paz, ivan, Set.of(dmitry, mechanic3));
 
-            Bus paz2 = new Bus("PAZ", "145NUM02");
+            Bus paz2 = new Bus("PAZ", "045 NU 02", 40);
             busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
         };
     }

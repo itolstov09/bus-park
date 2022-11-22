@@ -1,12 +1,15 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Bus;
+import dev.tolstov.buspark.model.BusDTO;
 import dev.tolstov.buspark.service.BusService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,11 +30,22 @@ public class BusController {
         return busService.findById(id);
     }
 
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Bus save(@RequestBody Bus newBus) {
         return busService.save(newBus);
+    }
+
+    @PostMapping("/short")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Bus save(
+            @RequestBody
+            @Valid
+            BusDTO dto
+    ) {
+        Bus bus = new Bus();
+        BeanUtils.copyProperties(dto, bus);
+        return busService.save(bus);
     }
 
     @PutMapping("/{id}")

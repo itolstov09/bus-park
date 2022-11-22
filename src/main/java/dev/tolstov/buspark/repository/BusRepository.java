@@ -2,6 +2,7 @@ package dev.tolstov.buspark.repository;
 
 import dev.tolstov.buspark.model.Bus;
 import dev.tolstov.buspark.model.Employee;
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,4 +20,6 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
     List<Bus> findBusesByMechanicId(Long mechanicId);
 
     Bus findBusByDriver(Employee driver);
+
+    boolean existsByNumberPlate(String numberPlate);
 }

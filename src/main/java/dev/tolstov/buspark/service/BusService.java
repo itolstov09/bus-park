@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Set;
 
@@ -19,18 +20,23 @@ public class BusService {
 
 
     public Bus save(Bus bus) {
+        if (busRepository.existsByNumberPlate(bus.getNumberPlate())) {
+            throw new EntityExistsException(
+                    String.format("Bus with number plate '%s' already exists!",
+                            bus.getNumberPlate()));
+        }
         return busRepository.save(bus);
     }
 
     public Bus save(Bus newBus, Employee driver) {
         setDriver(newBus, driver);
-        return busRepository.save(newBus);
+        return save(newBus);
     }
 
     public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
         setDriver(newBus, driver);
         newBus.setMechanics(mechanics);
-        return busRepository.save(newBus);
+        return save(newBus);
     }
 
 
@@ -84,6 +90,7 @@ public class BusService {
             );
         }
 
+        //todo переделать: не возвращать весь автобус. Возвращать только номерной знак автобуса
         Bus busByDriver = busRepository.findBusByDriver(employee);
         if (busByDriver != null) {
             throw new EmployeeException(String.format("Driver already drives bus %s", busByDriver.getNumberPlate()));

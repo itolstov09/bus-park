@@ -1,10 +1,7 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.exception.EmployeeException;
-import dev.tolstov.buspark.model.Address;
-import dev.tolstov.buspark.model.DriverLicense;
-import dev.tolstov.buspark.model.Employee;
-import dev.tolstov.buspark.model.EmployeeMechanicDTO;
+import dev.tolstov.buspark.model.*;
 import dev.tolstov.buspark.service.EmployeeService;
 import dev.tolstov.buspark.validation.use_cases.OnEmployeeAddressSave;
 import org.springframework.beans.BeanUtils;
@@ -39,16 +36,19 @@ public class EmployeeController {
 
     @PostMapping("/driver")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveDriver(@RequestBody @Valid Employee employee) {
-        Address homeAddress = employee.getHomeAddress();
-        DriverLicense driverLicense = employee.getDriverLicense();
-        return employeeService.save(employee, homeAddress, driverLicense);
+    @Validated(OnEmployeeAddressSave.class)
+    public Employee saveDriver(@RequestBody @Valid EmployeeDriverDTO dto) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(dto, employee);
+        Employee.Post post = Employee.Post.valueOf(dto.getPost());
+        employee.setPost(post);
+        return employeeService.save(employee, dto.getHomeAddress(), dto.getDriverLicense());
     }
 
     @PostMapping("/mechanic")
     @ResponseStatus(HttpStatus.CREATED)
     @Validated(OnEmployeeAddressSave.class)
-    public Employee saveMechanic(@RequestBody @Valid EmployeeMechanicDTO dto) {
+    public Employee saveMechanic( @RequestBody @Valid EmployeeMechanicDTO dto ) {
         Employee employee = new Employee();
         BeanUtils.copyProperties(dto, employee);
         Employee.Post post = Employee.Post.valueOf(dto.getPost());

@@ -1,19 +1,17 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
-import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
 import dev.tolstov.buspark.validation.ValidationUseCaseService;
-import dev.tolstov.buspark.validation.use_cases.OnDriverSave;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
+import javax.persistence.EntityExistsException;
 import java.util.List;
 
 @Service
@@ -31,29 +29,15 @@ public class EmployeeService {
 
 
     public Employee save(Employee newEmployee, Address homeAddress) {
-        //TODO если приходит водитель, то нельзя его сохранять, если у него нет прав
         addressService.save(homeAddress);
         newEmployee.setHomeAddress(homeAddress);
         return employeeRepository.save(newEmployee);
     }
 
-    @Validated(OnDriverSave.class)
-    public Employee save(Employee newEmployee, Address homeAddress, @Valid DriverLicense license) {
-        if (homeAddress == null) {
-            throw new EmployeeException("Employee home address must be not null");
-        }
-
-        validationUseCaseService.employeeAddressValidation(homeAddress);
-        newEmployee.setHomeAddress(homeAddress);
-        //todo driver license validation
-        newEmployee.setDriverLicense(license);
-        validationUseCaseService.driverValidation(newEmployee);
-
-
+    public Employee save(Employee newEmployee, Address homeAddress, DriverLicense license) {
         if (employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID())) {
-            throw new EmployeeException("Cannot save driver with exist driver license");
+            throw new EntityExistsException("Cannot save employee with exist driver license");
         }
-
         addressService.save(homeAddress);
         newEmployee.setHomeAddress(homeAddress);
         newEmployee.setDriverLicense(license);

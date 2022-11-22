@@ -54,9 +54,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Post post;
 
-    @NotNull(groups = OnDriverSave.class)
-    @Getter
-    @Setter
+    @Getter @Setter
     @Embedded
     private DriverLicense driverLicense;
 

@@ -81,19 +81,22 @@ public class BusService {
     // TODO перевести в boolean когда потребуется проверка должности механика
     // TODO вынести в другой метод: Добавить удаление обслуживаемых автобусов, так как сотрудник больше не является механиком
     private void driverVerification(Employee employee) {
+        String lastName = employee.getLastName();
+        String name = employee.getName();
+
         if (!employee.isCanBeDriver()) {
             throw new EmployeeException(
                     String.format(
                             "Employee %s can not be a driver! Reason: don't have a license!",
-                            employee.getName() + employee.getLastName()
+                            name + lastName
                     )
             );
         }
 
-        //todo переделать: не возвращать весь автобус. Возвращать только номерной знак автобуса
-        Bus busByDriver = busRepository.findBusByDriver(employee);
-        if (busByDriver != null) {
-            throw new EmployeeException(String.format("Driver already drives bus %s", busByDriver.getNumberPlate()));
+        String anotherBusNumberPlate = busRepository.numberPlateByDriverNameAndLastName(name, lastName);
+        if (anotherBusNumberPlate != null) {
+            throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
+                    name, lastName, anotherBusNumberPlate));
         }
     }
 }

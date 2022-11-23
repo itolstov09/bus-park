@@ -19,7 +19,15 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
     )
     List<Bus> findBusesByMechanicId(Long mechanicId);
 
-    Bus findBusByDriver(Employee driver);
+    @Query(
+            "SELECT bus.numberPlate " +
+            "FROM Bus bus " +
+            "JOIN Employee employee " +
+                "ON bus.driver.id = employee.id " +
+            "WHERE employee.name = ?1 " +
+                "AND employee.lastName = ?2"
+    )
+    String numberPlateByDriverNameAndLastName(String name, String lastName);
 
     boolean existsByNumberPlate(String numberPlate);
 }

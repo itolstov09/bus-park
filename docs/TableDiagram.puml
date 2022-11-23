@@ -57,7 +57,7 @@ package tables {
     entity "Остановка" as busstop {
         * bigint: id <<PK>>
         * varchar: name <<UNIQUE>>
-        * bigint: address_id <<FK>> <<UNIQUE>>
+        * bigint: address_id <<FK>>
     }
 
     busstop ||- address: bus_stop_address

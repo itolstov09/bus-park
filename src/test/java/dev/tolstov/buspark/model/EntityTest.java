@@ -100,10 +100,10 @@ public abstract class EntityTest {
         routeService.save(route2);
 
 
-        Bus paz = new Bus("PAZ", "125ASD02", 20);
+        Bus paz = new Bus("PAZ", "125 ASD 02", 20);
         busService.save(paz, ivan, Set.of(dmitry, mechanic3));
 
-        Bus paz2 = new Bus("PAZ", "145NUM02", 40);
+        Bus paz2 = new Bus("PAZ", "145 NUM 02", 40);
         busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
 
     }

@@ -1,48 +1,31 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.exception.EmployeeException;
+import dev.tolstov.buspark.repository.BusRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityExistsException;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BusTest extends EntityTest {
-    // Тесты для автобуса
-//      номерной знак(уникальность) нельзя сохранить автобус с номерным
-//      знаком, который уже есть в базе
-    @Test
-    void testAddBusWithExistingNumberPlateThrowsException() {
-        DataIntegrityViolationException violationException = assertThrows(
-                DataIntegrityViolationException.class,
-                () -> {
-                    Bus bus = busService.findAll().get(0);
-                    String numberPlate = bus.getNumberPlate();
-                    Bus newBus = new Bus("model", numberPlate, 55);
-                    busService.save(newBus);
-                }
-        );
-        assertTrue(
-                Objects.requireNonNull(violationException.getRootCause())
-                        .getMessage().contains("bus_number_plate_key") );
-    }
+    @Autowired
+    BusRepository busRepository;
 
-    //todo доделать или выкинуть к моменту использования spring validation
     /**
      * попытка сохранить автобус с уже существующим номером вызовет исключение
      */
-//    @Test
-//    void test() {
-//        assertThrows(EntityExistsException.class, () -> {
-//                Bus busFromDB = busService.findAll().get(0);
-//                String numberPlate = busFromDB.getNumberPlate();
-//                Bus newBus = new Bus("model", numberPlate);
-//                busService.save(newBus);
-//                }
-//        );
-//    }
+    @Test
+    void whenSaveBusWithExistsNumberPlate_thenThrowsException() {
+        assertThrows(EntityExistsException.class, () -> {
+                Bus busFromDB = busService.findAll().get(0);
+                String numberPlate = busFromDB.getNumberPlate();
+                Bus newBus = new Bus("model", numberPlate, 20);
+                busService.save(newBus);
+                }
+        );
+    }
 
 
     //      * сотрудника без водительского удостоверения нельзя указать как водителя
@@ -58,22 +41,6 @@ public class BusTest extends EntityTest {
         assertTrue(employeeException.getMessage().endsWith("Reason: don't have a license!"));
     }
 
-    @Test
-    void testBusDriverUniqueConstraint() {
-        DataIntegrityViolationException violationException = assertThrows(
-                DataIntegrityViolationException.class,
-                () -> {
-                    Bus bus = busService.findAll().get(0);
-                    Employee driver = bus.getDriver();
-                    Bus newBus = new Bus("model", "np", 56);
-                    newBus.setDriver(driver);
-                    busService.save(newBus);
-                }
-        );
-        assertTrue(
-                Objects.requireNonNull(violationException.getRootCause())
-                        .getMessage().contains("bus_driver_id_key") );
-    }
 
     @Test
     void whenSetDriverWhosAlreadyDrivesBus_thenThrowsException() {

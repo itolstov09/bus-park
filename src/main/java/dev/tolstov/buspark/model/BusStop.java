@@ -11,9 +11,6 @@ import javax.validation.constraints.NotNull;
         name = "bus_stop",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "bus_stop_address_id_key",
-                        columnNames = {"address_id"}),
-                @UniqueConstraint(
                         name = "bus_stop_name_key",
                         columnNames = {"name"})
         }

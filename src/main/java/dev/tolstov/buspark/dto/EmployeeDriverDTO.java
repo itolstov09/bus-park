@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.dto;
 
 
+import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.DriverLicense;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,22 @@ public class EmployeeDriverDTO extends EmployeeDTO {
     @Valid
     @NotNull
     private DriverLicense driverLicense;
+
+    public EmployeeDriverDTO() {
+    }
+
+    public EmployeeDriverDTO(
+            String name,
+            String lastName,
+            Double salary,
+            Address homeAddress,
+            String post,
+            DriverLicense driverLicense
+    ) {
+        super(name, lastName, salary, homeAddress);
+        this.post = post;
+        this.driverLicense = driverLicense;
+    }
 
     // по хорошему у механика тоже могут быть водительские права
 }

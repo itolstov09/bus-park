@@ -2,23 +2,18 @@ package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
-import dev.tolstov.buspark.model.*;
+import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.service.EmployeeService;
-import dev.tolstov.buspark.validation.use_cases.OnEmployeeAddressSave;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("api/v1/employees")
-@Validated
 public class EmployeeController {
 
     @Autowired
@@ -37,25 +32,14 @@ public class EmployeeController {
 
     @PostMapping("/driver")
     @ResponseStatus(HttpStatus.CREATED)
-    @Validated(OnEmployeeAddressSave.class)
-    public Employee saveDriver(@RequestBody @Valid EmployeeDriverDTO dto) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(dto, employee);
-        Employee.Post post = Employee.Post.valueOf(dto.getPost());
-        employee.setPost(post);
-        return employeeService.save(employee, dto.getHomeAddress(), dto.getDriverLicense());
+    public Employee saveDriver(@RequestBody EmployeeDriverDTO dto) {
+        return employeeService.save(dto);
     }
 
     @PostMapping("/mechanic")
     @ResponseStatus(HttpStatus.CREATED)
-    @Validated(OnEmployeeAddressSave.class)
-    public Employee saveMechanic( @RequestBody @Valid EmployeeMechanicDTO dto ) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(dto, employee);
-        Employee.Post post = Employee.Post.valueOf(dto.getPost());
-        employee.setPost(post);
-        Address homeAddress = dto.getHomeAddress();
-        return employeeService.save(employee, homeAddress);
+    public Employee saveMechanic( @RequestBody EmployeeMechanicDTO mechanic ) {
+        return employeeService.save(mechanic);
     }
 
     @PutMapping("/{id}")

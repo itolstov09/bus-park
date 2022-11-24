@@ -1,10 +1,12 @@
 package dev.tolstov.buspark.service;
 
+import dev.tolstov.buspark.dto.EmployeeDriverDTO;
+import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
-import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
+import dev.tolstov.buspark.validation.ValidationService;
 import dev.tolstov.buspark.validation.ValidationUseCaseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -25,23 +28,41 @@ public class EmployeeService {
     AddressService addressService;
 
     @Autowired
+    ValidationService validationService;
+
+    @Autowired
     ValidationUseCaseService validationUseCaseService;
 
 
-    public Employee save(Employee newEmployee, Address homeAddress) {
-        addressService.save(homeAddress);
-        newEmployee.setHomeAddress(homeAddress);
-        return employeeRepository.save(newEmployee);
+
+    public Employee save(Employee employee, Address homeAddress) {
+        employee.setHomeAddress(homeAddress);
+        return save(employee);
     }
 
-    public Employee save(Employee newEmployee, Address homeAddress, DriverLicense license) {
-        if (employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID())) {
+    @Validated
+    public Employee save(@Valid EmployeeMechanicDTO mechanic) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(mechanic, employee);
+        Employee.Post post = Employee.Post.valueOf(mechanic.getPost());
+        employee.setPost(post);
+
+        return save(employee);
+    }
+
+    @Validated
+    public Employee save(@Valid EmployeeDriverDTO driver) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(driver, employee);
+        Employee.Post post = Employee.Post.valueOf(driver.getPost());
+        employee.setPost(post);
+
+        validationUseCaseService.driverValidation(employee);
+
+        if (employeeRepository.existsByDriverLicenseLicenseID(employee.getDriverLicense().getLicenseID())) {
             throw new EntityExistsException("Cannot save employee with exist driver license");
         }
-        addressService.save(homeAddress);
-        newEmployee.setHomeAddress(homeAddress);
-        newEmployee.setDriverLicense(license);
-        return employeeRepository.save(newEmployee);
+        return save(employee);
     }
 
     public List<Employee> findAll() {
@@ -74,5 +95,11 @@ public class EmployeeService {
         return employeeRepository.findFirstByPost(post);
     }
 
+    private Employee save(Employee employee) {
+        validationService.employeeValidation(employee);
+
+        addressService.save(employee.getHomeAddress());
+        return employeeRepository.save(employee);
+    }
 }
 

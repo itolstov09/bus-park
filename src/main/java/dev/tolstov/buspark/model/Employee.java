@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.validation.constraints.PostSubset;
+import dev.tolstov.buspark.validation.use_cases.OnDriverSave;
 import lombok.*;
 
 import javax.persistence.*;
@@ -53,6 +54,8 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Post post;
 
+    @NotNull(groups = OnDriverSave.class)
+    @Valid
     @Getter @Setter
     @Embedded
     private DriverLicense driverLicense;

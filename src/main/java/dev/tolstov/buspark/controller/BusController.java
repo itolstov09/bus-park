@@ -38,14 +38,8 @@ public class BusController {
 
     @PostMapping("/short")
     @ResponseStatus(HttpStatus.CREATED)
-    public Bus save(
-            @RequestBody
-            @Valid
-            BusDTO dto
-    ) {
-        Bus bus = new Bus();
-        BeanUtils.copyProperties(dto, bus);
-        return busService.save(bus);
+    public Bus save( @RequestBody BusDTO dto ) {
+        return busService.save(dto);
     }
 
     @PutMapping("/{id}")

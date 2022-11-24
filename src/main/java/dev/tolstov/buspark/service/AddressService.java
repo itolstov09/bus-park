@@ -3,14 +3,11 @@ package dev.tolstov.buspark.service;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.repository.AddressRepository;
+import dev.tolstov.buspark.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class AddressService {
@@ -19,20 +16,14 @@ public class AddressService {
     AddressRepository addressRepository;
 
     @Autowired
-    Validator validator;
+    ValidationService validationService;
 
 
     public Address save(Address newAddress) {
-        addressValidation(newAddress);
+        validationService.addressValidation(newAddress);
         return addressRepository.save(newAddress);
     }
 
-    private void addressValidation(Address newAddress) {
-        Set<ConstraintViolation<Address>> constraintViolations = validator.validate(newAddress);
-        if (!constraintViolations.isEmpty()) {
-            throw new ConstraintViolationException(constraintViolations);
-        }
-    }
 
     public List<Address> findAll() {
         return addressRepository.findAll();

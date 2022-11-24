@@ -1,5 +1,6 @@
 package dev.tolstov.buspark;
 
+import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.model.*;
 import dev.tolstov.buspark.service.*;
 import lombok.RequiredArgsConstructor;
@@ -34,24 +35,34 @@ public class DBRunner {
             employeeService.save(mechanic3, street);
 
             DriverLicense ivanDL = new DriverLicense("asdf1234", "D");
-            Employee ivan = new Employee(
+            EmployeeDriverDTO ivanDTO = new EmployeeDriverDTO(
                     "Ivan",
                     "Ivanoff",
                     15000.0,
-                    Employee.Post.DRIVER);
-            employeeService.save(ivan, street, ivanDL);
+                    street,
+                    Employee.Post.DRIVER.name(),
+                    ivanDL);
+            Employee ivan = employeeService.save(ivanDTO);
 
             DriverLicense driverLicense1 = new DriverLicense("asdf1234555", "D");
-            Employee egor = new Employee(
+            EmployeeDriverDTO egorDTO = new EmployeeDriverDTO(
                     "Egor",
                     "Ivanoff",
                     15000.0,
-                    Employee.Post.DRIVER);
-            employeeService.save(egor, street, driverLicense1);
+                    street,
+                    Employee.Post.DRIVER.name(),
+                    driverLicense1);
+            employeeService.save(egorDTO);
 
             DriverLicense driverLicense = new DriverLicense("sdafsda1415", "D");
-            Employee driver2 = new Employee("driver2", "lastName", 15000.0, Employee.Post.DRIVER);
-            employeeService.save(driver2, street, driverLicense);
+            EmployeeDriverDTO driver2DTO = new EmployeeDriverDTO(
+                    "driver2",
+                    "lastName",
+                    15000.0,
+                    street,
+                    Employee.Post.DRIVER.name(),
+                    driverLicense);
+            Employee driver2 = employeeService.save(driver2DTO);
 
             Address busStopAddress = new Address("Bus stop address", null);
             addressService.save(busStopAddress);

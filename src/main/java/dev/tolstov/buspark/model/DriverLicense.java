@@ -14,11 +14,9 @@ import javax.validation.constraints.NotBlank;
 public class DriverLicense {
     @NonNull
     @Column(name = "license_id")
-    @NotBlank(groups = OnDriverSave.class)
     @NotBlank
     private String licenseID;
 
-    @NotBlank(groups = OnDriverSave.class)
     @NotBlank
     //TODO переделать setter. сделать возможность передавать список категорий, который потом будет переводится в стрoку
     // todo валидация через @Pattern

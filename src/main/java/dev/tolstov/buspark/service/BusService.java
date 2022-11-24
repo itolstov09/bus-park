@@ -1,5 +1,6 @@
 package dev.tolstov.buspark.service;
 
+import dev.tolstov.buspark.dto.BusDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Bus;
@@ -8,12 +9,15 @@ import dev.tolstov.buspark.repository.BusRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Validated
 public class BusService {
     @Autowired
     BusRepository busRepository;
@@ -99,4 +103,14 @@ public class BusService {
                     name, lastName, anotherBusNumberPlate));
         }
     }
+
+    @Validated
+    public Bus save(@Valid BusDTO bus) {
+        Bus entity = new Bus();
+        BeanUtils.copyProperties(bus, entity);
+        return save(entity);
+    }
+
+
+
 }

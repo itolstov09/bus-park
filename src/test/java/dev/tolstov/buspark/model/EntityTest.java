@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.TestEntityService;
+import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.service.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,16 +62,24 @@ public abstract class EntityTest {
         employeeService.save(mechanic3, street);
 
         DriverLicense ivanDL = new DriverLicense("asdf1234", "D");
-        Employee ivan = new Employee(
+        EmployeeDriverDTO ivanDTO = new EmployeeDriverDTO(
                 "Ivan",
                 "Ivanoff",
                 15000.0,
-                Employee.Post.DRIVER);
-        employeeService.save(ivan, street, ivanDL);
+                street,
+                Employee.Post.DRIVER.name(),
+                ivanDL);
+        Employee ivan = employeeService.save(ivanDTO);
 
         DriverLicense driverLicense = new DriverLicense("sdafsda1415", "D");
-        Employee driver2 = new Employee("driver2", "lastName", 15000.0, Employee.Post.DRIVER);
-        employeeService.save(driver2, street, driverLicense);
+        EmployeeDriverDTO driver2DTO = new EmployeeDriverDTO(
+                "driver2",
+                "lastName",
+                15000.0,
+                street,
+                Employee.Post.DRIVER.name(),
+                driverLicense);
+        Employee driver2 = employeeService.save(driver2DTO);
 
         Address busStopAddress = new Address("Bus stop address", null);
         addressService.save(busStopAddress);
@@ -103,7 +112,7 @@ public abstract class EntityTest {
         Bus paz = new Bus("PAZ", "125 ASD 02", 20);
         busService.save(paz, ivan, Set.of(dmitry, mechanic3));
 
-        Bus paz2 = new Bus("PAZ", "145 NUM 02", 40);
+        Bus paz2 = new Bus("PAZ", "045 NU 02", 40);
         busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
 
     }

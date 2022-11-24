@@ -1,13 +1,16 @@
 package dev.tolstov.buspark.model;
 
-import dev.tolstov.buspark.exception.EmployeeException;
+import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.service.EmployeeService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EmployeeTest extends EntityTest {
 
@@ -26,16 +29,19 @@ public class EmployeeTest extends EntityTest {
 
     @Test
     void whenSaveDriverWithoutLicense_thenThrowsException() {
-        assertThrows(EmployeeException.class,
+        assertThrows(ConstraintViolationException.class,
                 () -> {
                     Address address = new Address("s", 1);
-                    addressService.save(address);
                     Employee newEmployee = new Employee(
                             "N",
                             "L",
                             12.2,
                             Employee.Post.DRIVER);
-                    employeeService.save(newEmployee, address, null);
+                    EmployeeDriverDTO driverDTO = new EmployeeDriverDTO();
+                    newEmployee.setHomeAddress(address);
+                    BeanUtils.copyProperties(newEmployee, driverDTO);
+                    driverDTO.setPost(Employee.Post.DRIVER.name());
+                    employeeService.save(driverDTO);
                 });
     }
 
@@ -44,17 +50,15 @@ public class EmployeeTest extends EntityTest {
      */
     @Test
     void whenSaveEmployeeWithoutApartmentNumber_thenThrowsException(){
-        EmployeeException employeeException = assertThrows(EmployeeException.class,
+        assertThrows(ConstraintViolationException.class,
                 () -> {
-                    Address address = new Address("s", null);
-                    addressService.save(address);
                     Employee newEmployee = new Employee(
                             "N",
                             "L",
                             12.2,
                             Employee.Post.MECHANIC);
-                    employeeService.save(newEmployee, address);
-                });
-        assertEquals("Employee home address must have apartment number!", employeeException.getMessage());
+                    employeeService.save(newEmployee,
+                            new Address("s", null));
+                } );
     }
 }

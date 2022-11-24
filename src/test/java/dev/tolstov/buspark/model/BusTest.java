@@ -53,7 +53,7 @@ public class BusTest extends EntityTest {
                     busService.setDriver(newBus, driver);
                 }
         );
-        assertTrue( employeeException.getMessage().startsWith("Driver already drives bus"));
+        assertTrue( employeeException.getMessage().contains("already drives bus"));
     }
 
     //      одним автобусом могут заниматься несколько механиков

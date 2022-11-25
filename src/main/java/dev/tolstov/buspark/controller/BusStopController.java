@@ -18,13 +18,17 @@ public class BusStopController {
     BusStopService busStopService;
 
     @GetMapping
-    public List<BusStop> findAll() {
-        return busStopService.findAll();
+    public ResponseEntity<?> findAll() {
+        List<BusStop> busStopList = busStopService.findAll();
+        if (busStopList == null || busStopList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(busStopList);
     }
 
     @GetMapping("/{id}")
-    public BusStop findById(@PathVariable Long id) {
-        return busStopService.findById(id);
+    public ResponseEntity<BusStop> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(busStopService.findById(id));
     }
 
     @PostMapping

@@ -24,7 +24,7 @@ public class BusStop {
     private Long id;
 
     @NonNull
-    @NotNull @NotBlank
+    @NotBlank
     @Getter @Setter
     @Column(nullable = false)
     private String name;

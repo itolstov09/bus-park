@@ -3,6 +3,8 @@ package dev.tolstov.buspark.controller;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +20,17 @@ public class AddressController {
     AddressService addressService;
 
     @GetMapping
-    public List<Address> findAll() {
-        return addressService.findAll();
+    public ResponseEntity<?> findAll() {
+        List<Address> addressList = addressService.findAll();
+        if (addressList == null || addressList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(addressList);
     }
 
     @GetMapping("/{id}")
-    public Address findById(@PathVariable Long id) {
-        return addressService.findById(id);
+    public ResponseEntity<Address> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(addressService.findById(id));
     }
 
 

@@ -32,15 +32,15 @@ public class BusStopController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public BusStop save(@RequestBody BusStop busstop) {
+    public ResponseEntity<BusStop> save(@RequestBody BusStop busstop) {
         Address busStopAddress = busstop.getAddress();
-        return busStopService.save(busstop, busStopAddress);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(busStopService.save(busstop, busStopAddress));
     }
 
     @PutMapping("/{id}")
-    public BusStop update(@PathVariable Long id, @RequestBody BusStop busStop) {
-        return busStopService.update(id, busStop);
+    public ResponseEntity<BusStop> update(@PathVariable Long id, @RequestBody BusStop busStop) {
+        return ResponseEntity.ok(busStopService.update(id, busStop));
     }
 
     @DeleteMapping("/{id}")

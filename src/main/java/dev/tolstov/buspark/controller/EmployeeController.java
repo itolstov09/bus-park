@@ -21,30 +21,34 @@ public class EmployeeController {
 
 
     @GetMapping
-    public List<Employee> findAll() {
-        return employeeService.findAll();
+    public ResponseEntity<List<Employee>> findAll() {
+        List<Employee> employeeList = employeeService.findAll();
+        if (employeeList == null || employeeList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(employeeList);
     }
 
     @GetMapping("/{id}")
-    public Employee findById(@PathVariable Long id) {
-        return employeeService.findById(id);
+    public ResponseEntity<Employee> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.findById(id));
     }
 
     @PostMapping("/driver")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveDriver(@RequestBody EmployeeDriverDTO dto) {
-        return employeeService.save(dto);
+    public ResponseEntity<Employee> saveDriver(@RequestBody EmployeeDriverDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(employeeService.save(dto));
     }
 
     @PostMapping("/mechanic")
-    @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveMechanic( @RequestBody EmployeeMechanicDTO mechanic ) {
-        return employeeService.save(mechanic);
+    public ResponseEntity<Employee> saveMechanic( @RequestBody EmployeeMechanicDTO mechanic ) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(employeeService.save(mechanic));
     }
 
     @PutMapping("/{id}")
-    public Employee update(@PathVariable Long id, @RequestBody Employee employee) {
-        return employeeService.update(id, employee);
+    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee employee) {
+        return ResponseEntity.ok(employeeService.update(id, employee));
     }
 
     @DeleteMapping("/{id}")

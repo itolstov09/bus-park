@@ -16,24 +16,28 @@ public class RouteController {
     RouteService routeService;
 
     @GetMapping
-    public List<Route> findAll() {
-        return routeService.findAll();
+    public ResponseEntity<List<Route>> findAll() {
+        List<Route> routeList = routeService.findAll();
+        if (routeList == null || routeList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(routeList);
     }
 
     @GetMapping("/{id}")
-    public Route findById(@PathVariable Long id) {
-        return routeService.findById(id);
+    public ResponseEntity<Route> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(routeService.findById(id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Route save(@RequestBody Route route) {
-        return routeService.save(route);
+    public ResponseEntity<Route> save(@RequestBody Route route) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(routeService.save(route));
     }
 
     @PutMapping("/{id}")
-    public Route update(@PathVariable Long id, @RequestBody Route routeInfo) {
-        return routeService.update(id, routeInfo);
+    public ResponseEntity<Route> update(@PathVariable Long id, @RequestBody Route routeInfo) {
+        return ResponseEntity.ok(routeService.update(id, routeInfo));
     }
 
     @DeleteMapping("/{id}")

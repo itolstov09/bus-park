@@ -17,20 +17,19 @@ import javax.validation.constraints.NotNull;
 )
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter @Setter
 public class BusStop {
-    @Getter
+    @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
     @NotBlank
-    @Getter @Setter
     @Column(nullable = false)
     private String name;
 
     @NotNull
-    @Getter @Setter
     @OneToOne
     @JoinColumn(
             name = "address_id",

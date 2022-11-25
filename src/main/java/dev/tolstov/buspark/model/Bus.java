@@ -8,53 +8,51 @@ import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
 @Entity
 @Table(name = "bus",
 uniqueConstraints = {
         @UniqueConstraint(name = "bus_number_plate_key", columnNames = {"number_plate"}),
         @UniqueConstraint(name = "bus_driver_id_key", columnNames = {"driver_id"})
 })
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Setter @Getter
 public class Bus {
-    @Getter
+    @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
-    @NonNull @Getter @Setter
+    @NonNull
     @Column(nullable = false)
     private String model;
 
     @NotNull
     @Pattern(regexp = "[0-9]{3} [A-Z]{2,3} [0-9]{2}", message = "Номер не соответствует формату РК")
-    @NonNull @Getter @Setter
+    @NonNull
     @Column(name = "number_plate", nullable = false)
     private String numberPlate;
 
     @NotNull
     @Min(20)
     @Max(60)
-    @NonNull @Getter @Setter
+    @NonNull
     @Column(name = "max_passenger")
     private Integer maxPassenger;
 
-    @Getter
     @OneToOne
     @JoinColumn(
             name = "driver_id",
             foreignKey = @ForeignKey(name = "bus_driver_id_fkey") )
     private Employee driver;
 
-    @Getter @Setter
     @OneToOne
     @JoinColumn(
             name = "route_id",
             foreignKey = @ForeignKey(name = "bus_route_id_fkey"))
     private Route route;
 
-    @Getter @Setter
     @ManyToMany
     @JoinTable(
             name = "bus_mechanic",

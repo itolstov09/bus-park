@@ -17,22 +17,21 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter @Setter
 public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @Positive
     @NotNull
     @NonNull
-    @Getter @Setter
     @Column(name = "route_number", nullable = false)
     private Integer routeNumber;
 
     @NotEmpty(message = "Список остановок у маршрута не должен быть пустым")
-    @Getter @Setter
     @ManyToMany
     @JoinTable(
             name = "route_bus_stop",

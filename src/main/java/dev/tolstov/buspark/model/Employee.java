@@ -16,33 +16,29 @@ import javax.validation.constraints.Positive;
 })
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Getter @Setter
 public class Employee {
-    @Getter
+    @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
     @NonNull
-    @Getter @Setter
     private String name;
 
     @NotBlank
     @NonNull
-    @Getter @Setter
     private String lastName;
 
-    @Getter @Setter
     private String middleName;
 
     @Positive
     @NonNull
-    @Getter @Setter
     private Double salary;
 
     @Valid
     @NotNull
-    @Getter
     @ManyToOne(optional = false)
     @JoinColumn(name = "home_address_ID",
         foreignKey = @ForeignKey(name = "employee_home_address_ID_fkey"))
@@ -50,13 +46,12 @@ public class Employee {
 
     @NotNull
     @PostSubset(anyOf = {Post.DRIVER, Post.MECHANIC})
-    @NonNull @Getter @Setter
+    @NonNull
     @Enumerated(EnumType.STRING)
     private Post post;
 
     @NotNull(groups = OnDriverSave.class)
     @Valid
-    @Getter @Setter
     @Embedded
     private DriverLicense driverLicense;
 

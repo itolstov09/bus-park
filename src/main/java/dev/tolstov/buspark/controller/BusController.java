@@ -32,21 +32,16 @@ public class BusController {
         return ResponseEntity.ok(busService.findById(id));
     }
 
+    // сохраняем только DTO. Полную модель не трогай.
     @PostMapping
-    public ResponseEntity<Bus> save(@RequestBody Bus newBus) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(busService.save(newBus));
-    }
-
-    @PostMapping("/short")
     public ResponseEntity<Bus> save( @RequestBody BusDTO dto ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(busService.save(dto));
+                .body(busService.create(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Bus> update(@PathVariable Long id, @RequestBody Bus busInfo) {
-        return ResponseEntity.ok(busService.update(id, busInfo));
+    public ResponseEntity<Bus> update(@PathVariable Long id, @RequestBody BusDTO dto) {
+        return ResponseEntity.ok(busService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

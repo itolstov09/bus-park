@@ -8,8 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Set;
-
 @SpringBootTest
 public abstract class EntityTest {
     @Autowired
@@ -111,11 +109,12 @@ public abstract class EntityTest {
         routeService.save(route2);
 
 
-        Bus paz = new Bus("PAZ", "125 TES 92", 20);
-        busService.save(paz, ivan, Set.of(dmitry, mechanic3));
-
-        Bus paz2 = new Bus("PAZ", "045 TES 92", 40);
-        busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
+        // TODO переписать с использованием CRUD
+//        Bus paz = new Bus("PAZ", "125 TES 92", 20);
+//        busService.save(paz, ivan, Set.of(dmitry, mechanic3));
+//
+//        Bus paz2 = new Bus("PAZ", "045 TES 92", 40);
+//        busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
 
     }
 }

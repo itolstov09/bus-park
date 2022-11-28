@@ -23,41 +23,35 @@ public class BusService {
     BusRepository busRepository;
 
 
+
     @Validated
-    public Bus save(@Valid BusDTO bus) {
+    public Bus create(@Valid BusDTO bus) {
         Bus entity = new Bus();
         BeanUtils.copyProperties(bus, entity);
         return save(entity);
     }
 
-    public Bus save(Bus bus) {
-        if (busRepository.existsByNumberPlate(bus.getNumberPlate())) {
+    private Bus save(Bus bus) {
+        if (bus.getId() == null && busRepository.existsByNumberPlate(bus.getNumberPlate())) {
             throw new EntityExistsException(
                     String.format("Bus with number plate '%s' already exists!",
                             bus.getNumberPlate()));
         }
 
-        Employee driver = bus.getDriver();
-        String name = driver.getName();
-        String lastName = driver.getLastName();
-        String anotherBusNumberPlate = busRepository.numberPlateByDriverNameAndLastName(name, lastName);
-        if (anotherBusNumberPlate != null) {
-            throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
-                    name, lastName, anotherBusNumberPlate));
-        }
+        //TODO перенести в метод когда дойду до CRUD
+//        Employee driver = bus.getDriver();
+//        String name = driver.getName();
+//        String lastName = driver.getLastName();
+//        String anotherBusNumberPlate = busRepository.numberPlateByDriverNameAndLastName(name, lastName);
+//        if (anotherBusNumberPlate != null) {
+//            throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
+//                    name, lastName, anotherBusNumberPlate));
+//        }
+
+        // валидация перед сохранением не нужна, поскольку дто уже валидировалось
         return busRepository.save(bus);
     }
 
-    public Bus save(Bus newBus, Employee driver) {
-        setDriver(newBus, driver);
-        return save(newBus);
-    }
-
-    public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
-        setDriver(newBus, driver);
-        newBus.setMechanics(mechanics);
-        return save(newBus);
-    }
 
 
     public List<Bus> findAll() {
@@ -72,10 +66,15 @@ public class BusService {
                 );
     }
 
-    public Bus update(Long id, Bus busInfo) {
-        Bus byId = findById(id);
-        BeanUtils.copyProperties(busInfo, byId);
-        return busRepository.save(byId);
+    @Validated
+    public Bus update(Long id, @Valid BusDTO dto) {
+        Bus byId = busRepository.findById(id).orElseThrow(() ->
+                new BPEntityNotFoundException(Bus.class.getSimpleName(), id));
+        byId.setModel(dto.getModel());
+        byId.setNumberPlate(dto.getNumberPlate());
+        byId.setMaxPassenger(dto.getMaxPassenger());
+
+        return save(byId);
     }
 
     public void deleteById(Long busId) {
@@ -114,6 +113,16 @@ public class BusService {
 
     }
 
+    public Bus save(Bus newBus, Employee driver) {
+        setDriver(newBus, driver);
+        return save(newBus);
+    }
+
+    public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
+        setDriver(newBus, driver);
+        newBus.setMechanics(mechanics);
+        return save(newBus);
+    }
 
 
 

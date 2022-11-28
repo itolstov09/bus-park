@@ -31,6 +31,12 @@ public class BusService {
     }
 
     public Bus save(Bus bus) {
+        if (busRepository.existsByNumberPlate(bus.getNumberPlate())) {
+            throw new EntityExistsException(
+                    String.format("Bus with number plate '%s' already exists!",
+                            bus.getNumberPlate()));
+        }
+
         Employee driver = bus.getDriver();
         String name = driver.getName();
         String lastName = driver.getLastName();
@@ -38,12 +44,6 @@ public class BusService {
         if (anotherBusNumberPlate != null) {
             throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
                     name, lastName, anotherBusNumberPlate));
-        }
-
-        if (busRepository.existsByNumberPlate(bus.getNumberPlate())) {
-            throw new EntityExistsException(
-                    String.format("Bus with number plate '%s' already exists!",
-                            bus.getNumberPlate()));
         }
         return busRepository.save(bus);
     }

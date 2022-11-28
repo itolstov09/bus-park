@@ -43,14 +43,15 @@ public class BusTest extends EntityTest {
 
 
     @Test
-    void whenSetDriverWhosAlreadyDrivesBus_thenThrowsException() {
+    void whenSaveBusWithDriverWhosAlreadyDrivesBus_thenThrowsException() {
         EmployeeException employeeException = assertThrows(
                 EmployeeException.class,
                 () -> {
                     Bus bus = busService.findAll().get(0);
                     Employee driver = bus.getDriver();
                     Bus newBus = new Bus("model", "np", 57);
-                    busService.setDriver(newBus, driver);
+                    newBus.setDriver(driver);
+                    busService.save(newBus);
                 }
         );
         assertTrue( employeeException.getMessage().contains("already drives bus"));

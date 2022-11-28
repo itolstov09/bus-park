@@ -82,19 +82,23 @@ public abstract class EntityTest {
         Employee driver2 = employeeService.save(driver2DTO);
 
         Address busStopAddress = new Address("Bus stop address", null);
-        addressService.save(busStopAddress);
+//            addressService.save(busStopAddress);
         BusStop busStop = new BusStop("bus stop");
-        busStopService.save(busStop, busStopAddress);
+        busStop.setAddress(busStopAddress);
+        busStopService.save(busStop);
 
         Address busStop2Address = new Address("BS_2 adr", null);
         Address busStop3Address = new Address("BS_3 adr", null);
         Address busStop4Address = new Address("BS_4 adr", null);
-        addressService.saveAll(List.of(busStop2Address, busStop3Address, busStop4Address));
+//            addressService.saveAll(List.of(busStop2Address, busStop3Address, busStop4Address));
 
         BusStop busStop2 = new BusStop("Bus stop 2");
+        busStop2.setAddress(busStop2Address);
+        busStopService.save(busStop2);
+
         BusStop busStop3 = new BusStop("Bus stop 3");
-        busStopService.save(busStop2, busStop2Address);
-        busStopService.save(busStop3, busStop3Address);
+        busStop3.setAddress(busStop3Address);
+        busStopService.save(busStop3);
 
         Route route1 = new Route(1);
         route1.addBusStop(busStopService.findAll().get(0));
@@ -102,7 +106,8 @@ public abstract class EntityTest {
         routeService.save(route1);
 
         BusStop busStop4 = new BusStop("Bus stop 4");
-        busStopService.save(busStop4, busStop4Address);
+        busStop4.setAddress(busStop4Address);
+        busStopService.save(busStop4);
         Route route2 = new Route(51);
         route2.addBusStop(busStop4);
         route2.addBusStop(busStopService.findAll().get(0));

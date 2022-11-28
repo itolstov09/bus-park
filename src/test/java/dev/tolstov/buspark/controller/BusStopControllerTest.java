@@ -88,8 +88,9 @@ public class BusStopControllerTest {
     @Test
     public void whenSaveValidBusStop_thenStatusCreated() throws Exception {
         BusStop bs1 = new BusStop("Bus stop 1");
+        bs1.setAddress(new Address("s", null));
 
-        when(busStopService.save(any(BusStop.class), any(Address.class))).thenReturn(bs1);
+        when(busStopService.save(any(BusStop.class))).thenReturn(bs1);
         mockMvc.perform(
                         post("/api/v1/busStops")
                                 .contentType(MediaType.APPLICATION_JSON)

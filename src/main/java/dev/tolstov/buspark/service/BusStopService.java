@@ -25,15 +25,14 @@ public class BusStopService {
     ValidationService validationService;
 
 
-    public BusStop save(BusStop newBusStop, Address address) {
-        newBusStop.setAddress(address);
-        validationService.busStopValidation(newBusStop);
-        if (busStopRepository.existsByName(newBusStop.getName())) {
-            throw new EntityExistsException(String.format("Bus stop with name \"%s\" exists!", newBusStop.getName()));
+    public BusStop save(BusStop busStop) {
+        validationService.busStopValidation(busStop);
+        if (busStopRepository.existsByName(busStop.getName())) {
+            throw new EntityExistsException(String.format("Bus stop with name \"%s\" exists!", busStop.getName()));
         }
 
-        addressService.save(address);
-        return busStopRepository.save(newBusStop);
+        addressService.save(busStop.getAddress());
+        return busStopRepository.save(busStop);
     }
 
     public List<BusStop> findAll() {

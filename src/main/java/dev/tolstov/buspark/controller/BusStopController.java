@@ -32,10 +32,9 @@ public class BusStopController {
     }
 
     @PostMapping
-    public ResponseEntity<BusStop> save(@RequestBody BusStop busstop) {
-        Address busStopAddress = busstop.getAddress();
+    public ResponseEntity<BusStop> save(@RequestBody BusStop newBusStop) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(busStopService.save(busstop, busStopAddress));
+                .body(busStopService.save(newBusStop));
     }
 
     @PutMapping("/{id}")

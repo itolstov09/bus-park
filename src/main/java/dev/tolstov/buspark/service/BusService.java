@@ -23,7 +23,23 @@ public class BusService {
     BusRepository busRepository;
 
 
+    @Validated
+    public Bus save(@Valid BusDTO bus) {
+        Bus entity = new Bus();
+        BeanUtils.copyProperties(bus, entity);
+        return save(entity);
+    }
+
     public Bus save(Bus bus) {
+        Employee driver = bus.getDriver();
+        String name = driver.getName();
+        String lastName = driver.getLastName();
+        String anotherBusNumberPlate = busRepository.numberPlateByDriverNameAndLastName(name, lastName);
+        if (anotherBusNumberPlate != null) {
+            throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
+                    name, lastName, anotherBusNumberPlate));
+        }
+
         if (busRepository.existsByNumberPlate(bus.getNumberPlate())) {
             throw new EntityExistsException(
                     String.format("Bus with number plate '%s' already exists!",
@@ -92,24 +108,12 @@ public class BusService {
             throw new EmployeeException(
                     String.format(
                             "Employee %s can not be a driver! Reason: don't have a license!",
-                            name + lastName
-                    )
+                            name + lastName )
             );
         }
 
-        String anotherBusNumberPlate = busRepository.numberPlateByDriverNameAndLastName(name, lastName);
-        if (anotherBusNumberPlate != null) {
-            throw new EmployeeException(String.format("Driver '%s %s' already drives bus '%s'",
-                    name, lastName, anotherBusNumberPlate));
-        }
     }
 
-    @Validated
-    public Bus save(@Valid BusDTO bus) {
-        Bus entity = new Bus();
-        BeanUtils.copyProperties(bus, entity);
-        return save(entity);
-    }
 
 
 

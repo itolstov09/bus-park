@@ -22,16 +22,21 @@ public class RouteService {
     @Autowired
     ValidationService validationService;
 
+    @Autowired
+    BusStopService busStopService;
 
-    public Route save(Route newRoute) {
-        validationService.routeValidation(newRoute);
 
-        if (routeRepository.existsByRouteNumber(newRoute.getRouteNumber())) {
+    public Route save(Route route) {
+        validationService.routeValidation(route);
+
+        if (routeRepository.existsByRouteNumber(route.getRouteNumber())) {
             throw new EntityExistsException(
-                    String.format("Route with number %s already exists!", newRoute.getRouteNumber())
+                    String.format("Route with number %s already exists!", route.getRouteNumber())
             );
         }
-        return routeRepository.save(newRoute);
+        route.getBusStops().forEach(busStopService::save);
+
+        return routeRepository.save(route);
     }
 
     public Route save(Route newRoute, Set<BusStop> busStops) {

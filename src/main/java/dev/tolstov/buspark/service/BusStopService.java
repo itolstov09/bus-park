@@ -27,7 +27,7 @@ public class BusStopService {
 
     public BusStop save(BusStop busStop) {
         validationService.busStopValidation(busStop);
-        if (busStopRepository.existsByName(busStop.getName())) {
+        if (busStop.getId() == null && busStopRepository.existsByName(busStop.getName())) {
             throw new EntityExistsException(String.format("Bus stop with name \"%s\" exists!", busStop.getName()));
         }
 

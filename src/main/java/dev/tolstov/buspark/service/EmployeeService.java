@@ -17,7 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.function.DoubleUnaryOperator;
+import java.util.Objects;
 
 @Service
 @Validated
@@ -98,8 +98,12 @@ public class EmployeeService {
         DriverLicense license = employee.getDriverLicense();
         //todo как по мне тут потенциальный баг. Если обновлять данные одного водителя и
         // подставить лицензию другого, то выдаст 500. Поскольку проверка по ID лицензии скорее всего не произойдет
-        if ( employee.getId() == null
-                && (license != null && employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID()) )
+
+        Long employeeId = employee.getId();
+        String licenseID = license.getLicenseID();
+        Long idByLicenseID = employeeRepository.getIdByLicenseID(licenseID);
+        if ( employeeId == null && employeeRepository.existsByDriverLicenseLicenseID(licenseID)
+                || idByLicenseID != null && !Objects.equals(idByLicenseID, employeeId)
         ) {
             throw new EntityExistsException("Cannot save employee with exist driver license");
         }

@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -32,10 +33,16 @@ public class BusService {
     }
 
     private Bus save(Bus bus) {
-        if (bus.getId() == null && busRepository.existsByNumberPlate(bus.getNumberPlate())) {
+        Long busId = bus.getId();
+        String busNumberPlate = bus.getNumberPlate();
+        Long idByNumberPlate = busRepository.getIdByNumberPlate(busNumberPlate);
+
+        if ( busId == null && busRepository.existsByNumberPlate(busNumberPlate)
+                || idByNumberPlate != null && !Objects.equals(idByNumberPlate, busId)
+        ) {
             throw new EntityExistsException(
                     String.format("Bus with number plate '%s' already exists!",
-                            bus.getNumberPlate()));
+                            busNumberPlate));
         }
 
         //TODO перенести в метод когда дойду до CRUD

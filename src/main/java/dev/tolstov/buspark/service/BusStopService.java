@@ -1,7 +1,6 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
-import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.repository.BusStopRepository;
 import dev.tolstov.buspark.validation.ValidationService;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class BusStopService {
@@ -27,8 +27,36 @@ public class BusStopService {
 
     public BusStop save(BusStop busStop) {
         validationService.busStopValidation(busStop);
-        if (busStop.getId() == null && busStopRepository.existsByName(busStop.getName())) {
-            throw new EntityExistsException(String.format("Bus stop with name \"%s\" exists!", busStop.getName()));
+        //если создание то не должно быть записи с таким же уникальным значением
+//        id - null, нет записи со значением
+        //если обновление то не должно быть записи с таким же уникальным значением
+//        id содержит значение, id записи равно id по уникальному значению
+
+
+        // Ниже попытка уложить в один if этой констролябии
+//        if (busStopId == null) {
+//            if (busStopRepository.existsByName(busStopName)) {
+//                throw new EntityExistsException(
+//                        String.format("Bus stop with name \"%s\" exists!", busStopName)
+//                );
+//            }
+//        } else {
+//            Long idByName = busStopRepository.getIdByName(busStopName);
+//            if (idByName != null && !Objects.equals(idByName, busStopId)) {
+//                throw new EntityExistsException(
+//                        String.format("Bus stop with name \"%s\" exists!", busStopName)
+//                );
+//            }
+//        }
+        String busStopName = busStop.getName();
+        Long busStopId = busStop.getId();
+        Long idByName = busStopRepository.getIdByName(busStopName);
+        if ( busStopId == null && busStopRepository.existsByName(busStopName)
+                || idByName != null && !Objects.equals(idByName, busStopId)
+        ) {
+            throw new EntityExistsException(
+                    String.format("Bus stop with name \"%s\" exists!", busStopName)
+            );
         }
 
         addressService.save(busStop.getAddress());

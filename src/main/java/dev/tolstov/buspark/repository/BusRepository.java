@@ -30,4 +30,9 @@ public interface BusRepository extends JpaRepository<Bus, Long> {
     String numberPlateByDriverNameAndLastName(String name, String lastName);
 
     boolean existsByNumberPlate(String numberPlate);
+
+    @Query("SELECT bus.id " +
+            "FROM Bus bus " +
+            "WHERE bus.numberPlate=?1")
+    Long getIdByNumberPlate(String numberPlate);
 }

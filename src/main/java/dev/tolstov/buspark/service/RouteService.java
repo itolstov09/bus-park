@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -29,15 +30,22 @@ public class RouteService {
     public Route save(Route route) {
         validationService.routeValidation(route);
 
-        if (routeRepository.existsByRouteNumber(route.getRouteNumber())) {
+        Integer routeNumber = route.getRouteNumber();
+        Long idByRouteNumber = routeRepository.getIdByRouteNumber(routeNumber);
+        Long routeId = route.getId();
+
+        if ( routeId == null && routeRepository.existsByRouteNumber(routeNumber)
+                || idByRouteNumber != null && !Objects.equals(idByRouteNumber, routeId)
+        ) {
             throw new EntityExistsException(
-                    String.format("Route with number %s already exists!", route.getRouteNumber())
+                    String.format("Route with number %s already exists!", routeNumber)
             );
         }
+
         route.getBusStops().forEach(busStopService::save);
 
         return routeRepository.save(route);
-    }
+        }
 
     public Route save(Route newRoute, Set<BusStop> busStops) {
         newRoute.setBusStops(busStops);

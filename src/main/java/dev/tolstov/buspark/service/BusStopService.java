@@ -49,7 +49,7 @@ public class BusStopService {
     public BusStop update(Long id, BusStop busStopInfo) {
         BusStop busStop = findById(id);
         BeanUtils.copyProperties(busStopInfo, busStop);
-        return busStopRepository.save(busStop);
+        return save(busStop);
     }
 
     public void deleteById(Long busStopId) {

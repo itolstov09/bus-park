@@ -60,7 +60,7 @@ public class RouteService {
         System.out.println("ROUTE UPDATE");
         Route byId = findById(id);
         BeanUtils.copyProperties(routeInfo, byId);
-        return routeRepository.save(byId);
+        return save(byId);
     }
 
     public void deleteById(Long routeId) {

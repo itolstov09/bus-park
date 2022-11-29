@@ -34,9 +34,8 @@ public class AddressService {
                 () -> new BPEntityNotFoundException(Address.class.getSimpleName(), addressId));
     }
 
-    // todo добавить валидацию
     public Address update(Address addressInfo) {
-        return addressRepository.save(addressInfo);
+        return save(addressInfo);
     }
 
     public void deleteById(Long addressId) {

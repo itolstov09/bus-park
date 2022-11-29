@@ -41,7 +41,7 @@ public class EmployeeTest extends EntityTest {
                     newEmployee.setHomeAddress(address);
                     BeanUtils.copyProperties(newEmployee, driverDTO);
                     driverDTO.setPost(Employee.Post.DRIVER.name());
-                    employeeService.save(driverDTO);
+                    employeeService.createDriver(driverDTO);
                 });
     }
 

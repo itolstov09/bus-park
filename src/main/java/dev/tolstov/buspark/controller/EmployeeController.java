@@ -37,18 +37,23 @@ public class EmployeeController {
     @PostMapping("/driver")
     public ResponseEntity<Employee> saveDriver(@RequestBody EmployeeDriverDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(employeeService.save(dto));
+                .body(employeeService.createDriver(dto));
     }
 
     @PostMapping("/mechanic")
     public ResponseEntity<Employee> saveMechanic( @RequestBody EmployeeMechanicDTO mechanic ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(employeeService.save(mechanic));
+                .body(employeeService.createMechanic(mechanic));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Employee> update(@PathVariable Long id, @RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.update(id, employee));
+    @PutMapping("/driver/{id}")
+    public ResponseEntity<Employee> updateDriver(@PathVariable Long id, @RequestBody EmployeeDriverDTO dto) {
+        return ResponseEntity.ok(employeeService.updateDriver(id, dto));
+    }
+
+    @PutMapping("/mechanic/{id}")
+    public ResponseEntity<Employee> updateMechanic(@PathVariable Long id, @RequestBody EmployeeMechanicDTO dto) {
+        return ResponseEntity.ok(employeeService.updateMechanic(id, dto));
     }
 
     @DeleteMapping("/{id}")

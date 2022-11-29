@@ -4,6 +4,7 @@ import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
+import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
 import dev.tolstov.buspark.validation.ValidationService;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.function.DoubleUnaryOperator;
 
 @Service
 @Validated
@@ -35,35 +37,23 @@ public class EmployeeService {
 
 
 
+    //TODO убрать. используется только в тестах
     public Employee save(Employee employee, Address homeAddress) {
         employee.setHomeAddress(homeAddress);
         return save(employee);
     }
 
+    // todo задать вопрос в ТГ чате, как вынести дублированный код в отдельный метод не городя перегрузку
     @Validated
-    public Employee save(@Valid EmployeeMechanicDTO mechanic) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(mechanic, employee);
-        Employee.Post post = Employee.Post.valueOf(mechanic.getPost());
-        employee.setPost(post);
-
-        return save(employee);
+    public Employee createMechanic(@Valid EmployeeMechanicDTO mechanic) {
+        return save(mapMechanicDTOtoEmployee(mechanic));
     }
 
     @Validated
-    public Employee save(@Valid EmployeeDriverDTO driver) {
-        Employee employee = new Employee();
-        BeanUtils.copyProperties(driver, employee);
-        Employee.Post post = Employee.Post.valueOf(driver.getPost());
-        employee.setPost(post);
-
-        validationUseCaseService.driverValidation(employee);
-
-        if (employeeRepository.existsByDriverLicenseLicenseID(employee.getDriverLicense().getLicenseID())) {
-            throw new EntityExistsException("Cannot save employee with exist driver license");
-        }
-        return save(employee);
+    public Employee createDriver(@Valid EmployeeDriverDTO driver) {
+        return save(mapDriverDTOToEmployee(driver));
     }
+
 
     public List<Employee> findAll() {
         return employeeRepository.findAll();
@@ -76,10 +66,18 @@ public class EmployeeService {
         );
     }
 
-    public Employee update(Long id, Employee employeeInfo) {
+    @Validated
+    public Employee updateDriver(Long id, @Valid EmployeeDriverDTO driver) {
         Employee byId = findById(id);
-        BeanUtils.copyProperties(employeeInfo, byId);
-        return employeeRepository.save(byId);
+        BeanUtils.copyProperties(driver, byId);
+        return save(byId);
+    }
+
+    @Validated
+    public Employee updateMechanic(Long id, @Valid EmployeeMechanicDTO mechanic) {
+        Employee byId = findById(id);
+        BeanUtils.copyProperties(mechanic, byId);
+        return save(byId);
     }
 
     public void deleteById(Long employeeId) {
@@ -96,10 +94,34 @@ public class EmployeeService {
     }
 
     private Employee save(Employee employee) {
-        validationService.employeeValidation(employee);
+
+        DriverLicense license = employee.getDriverLicense();
+        //todo как по мне тут потенциальный баг. Если обновлять данные одного водителя и
+        // подставить лицензию другого, то выдаст 500. Поскольку проверка по ID лицензии скорее всего не произойдет
+        if ( employee.getId() == null
+                && (license != null && employeeRepository.existsByDriverLicenseLicenseID(license.getLicenseID()) )
+        ) {
+            throw new EntityExistsException("Cannot save employee with exist driver license");
+        }
 
         addressService.save(employee.getHomeAddress());
         return employeeRepository.save(employee);
+    }
+
+    private Employee mapMechanicDTOtoEmployee(EmployeeMechanicDTO mechanic) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(mechanic, employee);
+        Employee.Post post = Employee.Post.valueOf(mechanic.getPost());
+        employee.setPost(post);
+        return employee;
+    }
+
+    private Employee mapDriverDTOToEmployee(EmployeeDriverDTO driver) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(driver, employee);
+        Employee.Post post = Employee.Post.valueOf(driver.getPost());
+        employee.setPost(post);
+        return employee;
     }
 }
 

@@ -66,7 +66,7 @@ public abstract class EntityTest {
                 street,
                 Employee.Post.DRIVER.name(),
                 ivanDL);
-        Employee ivan = employeeService.save(ivanDTO);
+        Employee ivan = employeeService.createDriver(ivanDTO);
 
         DriverLicense driverLicense = new DriverLicense("tsdafsda1415", "D");
         EmployeeDriverDTO driver2DTO = new EmployeeDriverDTO(
@@ -76,7 +76,7 @@ public abstract class EntityTest {
                 street,
                 Employee.Post.DRIVER.name(),
                 driverLicense);
-        Employee driver2 = employeeService.save(driver2DTO);
+        Employee driver2 = employeeService.createDriver(driver2DTO);
 
         Address busStopAddress = new Address("TBus stop address", null);
         BusStop busStop = new BusStop("Tbus stop");

@@ -1,0 +1,27 @@
+[
+  {
+    "exampleKey": "bus-stop-PUT-200",
+    "description": "Valid bus stop request body",
+    "requestBody": {
+      "id": 1,
+      "name": "bus stop name",
+      "address": {
+        "id": 1,
+        "street": "bus stop address"
+      }
+    }
+  },
+  {
+    "exampleKey": "bus-stop-PUT-400",
+    "description": "Invalid bus stop body - set employee address",
+    "requestBody": {
+      "id": 1,
+      "name": "bus stop name",
+      "address": {
+        "id": 2,
+        "street": "employee home address",
+        "apartmentNumber": 18
+      }
+    }
+  }
+]

@@ -1,6 +1,6 @@
 [
   {
-    "exampleKey": "bus-stop-PUT-200",
+    "exampleKey": "PUT-200",
     "description": "Valid bus stop request body",
     "requestBody": {
       "id": 1,
@@ -12,7 +12,7 @@
     }
   },
   {
-    "exampleKey": "bus-stop-PUT-400",
+    "exampleKey": "PUT-400",
     "description": "Invalid bus stop body - set employee address",
     "requestBody": {
       "id": 1,

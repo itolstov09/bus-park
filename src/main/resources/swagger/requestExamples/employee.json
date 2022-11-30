@@ -1,0 +1,43 @@
+[
+  {
+    "exampleKey": "driver-PUT-200",
+    "description": "Valid driver",
+    "requestBody": {
+      "id": 1,
+      "name": "string",
+      "lastName": "string",
+      "middleName": "",
+      "salary": 10000.0,
+      "homeAddress": {
+        "id": 1,
+        "street": "string",
+        "apartmentNumber": 1
+      },
+      "post": "DRIVER",
+      "driverLicense": {
+        "licenseID": "string",
+        "licenseCategories": "string"
+      }
+    }
+  },
+  {
+    "exampleKey": "driver-PUT-400",
+    "description": "Invalid driver",
+    "requestBody": {
+      "id": 1,
+      "name": "",
+      "lastName": "",
+      "middleName": "",
+      "salary": 10000.0,
+      "homeAddress": {
+        "id": 1,
+        "street": "string"
+      },
+      "post": "MECHANIC",
+      "driverLicense": {
+        "licenseID": "",
+        "licenseCategories": ""
+      }
+    }
+  }
+]

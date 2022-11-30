@@ -4,6 +4,8 @@ import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.service.EmployeeService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +49,20 @@ public class EmployeeController {
     }
 
     @PutMapping("/driver/{id}")
-    public ResponseEntity<Employee> updateDriver(@PathVariable Long id, @RequestBody EmployeeDriverDTO dto) {
+    public ResponseEntity<Employee> updateDriver(
+            @PathVariable Long id,
+            @RequestBody
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid",
+                                    ref = "#/components/examples/employee-driver-PUT-200"),
+                            @ExampleObject(
+                                    name = "invalid",
+                                    ref = "#/components/examples/employee-driver-PUT-400")
+                    }
+                    ) )
+                    EmployeeDriverDTO dto) {
         return ResponseEntity.ok(employeeService.updateDriver(id, dto));
     }
 

@@ -3,6 +3,7 @@ package dev.tolstov.buspark.service;
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
+import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
@@ -69,6 +70,9 @@ public class EmployeeService {
     @Validated
     public Employee updateDriver(Long id, @Valid EmployeeDriverDTO driver) {
         Employee byId = findById(id);
+        if (byId.getPost() != Employee.Post.DRIVER) {
+            throw new EmployeeException("Trying put driver info in mechanic entity");
+        }
         BeanUtils.copyProperties(driver, byId);
         return save(byId);
     }
@@ -76,6 +80,9 @@ public class EmployeeService {
     @Validated
     public Employee updateMechanic(Long id, @Valid EmployeeMechanicDTO mechanic) {
         Employee byId = findById(id);
+        if (byId.getPost() != Employee.Post.MECHANIC) {
+            throw new EmployeeException("Trying put mechanic info in driver entity");
+        }
         BeanUtils.copyProperties(mechanic, byId);
         return save(byId);
     }

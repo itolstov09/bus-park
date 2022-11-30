@@ -12,6 +12,8 @@ import dev.tolstov.buspark.validation.ValidationService;
 import dev.tolstov.buspark.validation.ValidationUseCaseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -56,6 +58,7 @@ public class EmployeeService {
     }
 
 
+    // используется в тестах
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
@@ -133,6 +136,10 @@ public class EmployeeService {
         Employee.Post post = Employee.Post.valueOf(driver.getPost());
         employee.setPost(post);
         return employee;
+    }
+
+    public Page<Employee> getPage(Integer page, Integer size) {
+        return employeeRepository.findAll(PageRequest.of(page, size));
     }
 }
 

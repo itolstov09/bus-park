@@ -6,6 +6,8 @@ import dev.tolstov.buspark.repository.BusStopRepository;
 import dev.tolstov.buspark.validation.ValidationService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -88,5 +90,9 @@ public class BusStopService {
 
     public void deleteAll() {
         busStopRepository.deleteAll();
+    }
+
+    public Page<BusStop> getPage(Integer page, Integer size) {
+        return busStopRepository.findAll(PageRequest.of(page, size));
     }
 }

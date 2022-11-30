@@ -1,14 +1,13 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Address;
+import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,12 +19,11 @@ public class AddressController {
     AddressService addressService;
 
     @GetMapping
-    public ResponseEntity<?> findAll() {
-        List<Address> addressList = addressService.findAll();
-        if (addressList == null || addressList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(addressList);
+    public ResponseEntity<Page<Address>> getPage(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(addressService.getPage(page, size));
     }
 
     @GetMapping("/{id}")

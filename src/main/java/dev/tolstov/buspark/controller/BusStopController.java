@@ -1,10 +1,12 @@
 package dev.tolstov.buspark.controller;
 
+import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.service.BusStopService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +20,13 @@ public class BusStopController {
     @Autowired
     BusStopService busStopService;
 
+
     @GetMapping
-    public ResponseEntity<?> findAll() {
-        List<BusStop> busStopList = busStopService.findAll();
-        if (busStopList == null || busStopList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(busStopList);
+    public ResponseEntity<Page<BusStop>> getPage(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(busStopService.getPage(page, size));
     }
 
     @GetMapping("/{id}")

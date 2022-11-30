@@ -7,6 +7,7 @@ import dev.tolstov.buspark.service.EmployeeService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,11 @@ public class EmployeeController {
 
 
     @GetMapping
-    public ResponseEntity<List<Employee>> findAll() {
-        List<Employee> employeeList = employeeService.findAll();
-        if (employeeList == null || employeeList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(employeeList);
+    public ResponseEntity<Page<Employee>> getPage(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(employeeService.getPage(page, size));
     }
 
     @GetMapping("/{id}")

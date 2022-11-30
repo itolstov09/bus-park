@@ -2,8 +2,10 @@ package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.dto.BusDTO;
 import dev.tolstov.buspark.model.Bus;
+import dev.tolstov.buspark.model.Route;
 import dev.tolstov.buspark.service.BusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +21,11 @@ public class BusController {
 
 
     @GetMapping
-    public ResponseEntity<List<Bus>> findAll() {
-        List<Bus> busList = busService.findAll();
-        if (busList == null || busList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(busList);
+    public ResponseEntity<Page<Bus>> getPage(
+            @RequestParam Integer page,
+            @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(busService.getPage(page, size));
     }
 
     @GetMapping("/{id}")

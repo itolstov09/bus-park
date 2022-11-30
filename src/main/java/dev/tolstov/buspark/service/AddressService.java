@@ -5,6 +5,8 @@ import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.repository.AddressRepository;
 import dev.tolstov.buspark.validation.ValidationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,5 +51,14 @@ public class AddressService {
 
     public List<Address> saveAll(Iterable<Address> addressList) {
         return addressRepository.saveAll(addressList);
+    }
+
+//   ====================================================================================================
+    public List<Address> findAddresesWithoutApartmentNumber() {
+        return null;
+    }
+
+    public Page<Address> getPage(Integer page, Integer size) {
+        return addressRepository.findAll(PageRequest.of(page, size));
     }
 }

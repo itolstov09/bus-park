@@ -8,6 +8,8 @@ import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.BusRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -132,5 +134,7 @@ public class BusService {
     }
 
 
-
+    public Page<Bus> getPage(Integer page, Integer size) {
+        return busRepository.findAll(PageRequest.of(page, size));
+    }
 }

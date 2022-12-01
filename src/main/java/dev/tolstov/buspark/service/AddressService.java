@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Service
@@ -60,5 +62,10 @@ public class AddressService {
 
     public Page<Address> getPage(Integer page, Integer size) {
         return addressRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Transactional
+    public Integer updateStreetAddress(@NotBlank String street, Long addressId) {
+        return addressRepository.updateStreetAddress(street, addressId);
     }
 }

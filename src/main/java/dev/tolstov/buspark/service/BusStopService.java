@@ -1,20 +1,27 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
+import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.repository.BusStopRepository;
 import dev.tolstov.buspark.validation.ValidationService;
+import dev.tolstov.buspark.validation.ValidationUseCaseService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@Validated
 public class BusStopService {
 
     @Autowired
@@ -25,6 +32,9 @@ public class BusStopService {
 
     @Autowired
     ValidationService validationService;
+
+    @Autowired
+    ValidationUseCaseService validationUseCaseService;
 
 
     public BusStop save(BusStop busStop) {
@@ -95,4 +105,45 @@ public class BusStopService {
     public Page<BusStop> getPage(Integer page, Integer size) {
         return busStopRepository.findAll(PageRequest.of(page, size));
     }
+
+    public BusStop findByName(@NotBlank String name) {
+        return busStopRepository.findOneByName(name).orElseThrow(
+                () -> new BPEntityNotFoundException(BusStop.class.getSimpleName(), name)
+        );
+    }
+
+    public List<BusStop> findByStreet(@NotBlank String street) {
+        return busStopRepository.findByAddressStreet(street);
+    }
+
+    @Transactional
+    public Integer editName(@NotBlank String name, @Positive Long id) {
+        return busStopRepository.editName(name, id);
+    }
+
+    @Transactional
+    public Integer setAddress(@Positive Long addressId, @Positive Long busStopId) {
+        Address address = addressService.findById(addressId);
+        validationUseCaseService.busStopAddressValidation(address);
+
+        return busStopRepository.setAddress(addressId, busStopId);
+    }
+
+    @Transactional
+    public Integer updateAddressStreet(@NotBlank String street, Long id) {
+        if (!busStopRepository.existsById(id)) {
+            throw new BPEntityNotFoundException(BusStop.class.getSimpleName(), id);
+        }
+        Long addressId = busStopRepository.getAddressIdById(id);
+        return addressService.updateStreetAddress(street, addressId);
+    }
+
+    //todo пока нет общей картины. так что ну думаю что стоит использовать удаление
+//    @Transactional
+//    public void deleteByName(@NotBlank String name) {
+//        if (!busStopRepository.existsByName(name)) {
+//            throw new BPEntityNotFoundException(String.format("Cannot delete entity with name '%s'. Not found.", name));
+//        }
+//        busStopRepository.deleteByName(name);
+//    }
 }

@@ -1,6 +1,5 @@
 package dev.tolstov.buspark.model;
 
-import dev.tolstov.buspark.validation.use_cases.OnDriverSave;
 import lombok.*;
 
 import javax.persistence.Column;

@@ -1,10 +1,12 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
+import dev.tolstov.buspark.dto.EmployeeFIODTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Address;
+import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
@@ -15,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Objects;
 
@@ -108,14 +114,15 @@ public class EmployeeService {
         DriverLicense license = employee.getDriverLicense();
         //todo как по мне тут потенциальный баг. Если обновлять данные одного водителя и
         // подставить лицензию другого, то выдаст 500. Поскольку проверка по ID лицензии скорее всего не произойдет
-
-        Long employeeId = employee.getId();
-        String licenseID = license.getLicenseID();
-        Long idByLicenseID = employeeRepository.getIdByLicenseID(licenseID);
-        if ( employeeId == null && employeeRepository.existsByDriverLicenseLicenseID(licenseID)
-                || idByLicenseID != null && !Objects.equals(idByLicenseID, employeeId)
-        ) {
-            throw new EntityExistsException("Cannot save employee with exist driver license");
+        if (license != null) {
+            Long employeeId = employee.getId();
+            String licenseID = license.getLicenseID();
+            Long idByLicenseID = employeeRepository.getIdByLicenseID(licenseID);
+            if ( employeeId == null && employeeRepository.existsByDriverLicenseLicenseID(licenseID)
+                    || idByLicenseID != null && !Objects.equals(idByLicenseID, employeeId)
+            ) {
+                throw new EntityExistsException("Cannot save employee with exist driver license");
+            }
         }
 
         addressService.save(employee.getHomeAddress());
@@ -138,8 +145,51 @@ public class EmployeeService {
         return employee;
     }
 
-    public Page<Employee> getPage(Integer page, Integer size) {
+    public Page<Employee> getPage(@Min(0) Integer page, @Positive Integer size) {
         return employeeRepository.findAll(PageRequest.of(page, size));
+    }
+
+    public List<Employee> findByLastName(@NotBlank String lastName) {
+        return employeeRepository.findByLastName(lastName);
+    }
+
+    public List<Employee> findByName(@NotBlank String name) {
+        return employeeRepository.findByName(name);
+    }
+
+    public List<Employee> findByMiddleName(String middleName) {
+        return employeeRepository.findByMiddleName(middleName);
+    }
+
+    @Transactional
+    @Validated
+    public Integer updateFIO(@Valid EmployeeFIODTO dto, Long id) {
+        if (!employeeRepository.existsById(id)) {
+            throw new BPEntityNotFoundException(
+                    String.format("Cannot update FIO. Employee with id %d not found", id) );
+        }
+        return employeeRepository.updateFIO(dto.getName(), dto.getLastName(), dto.getMiddleName(), id);
+    }
+
+
+    public void editHomeAddress(Address homeAddress, Long id) {
+        validationUseCaseService.employeeAddressValidation(homeAddress);
+
+        if (!employeeRepository.existsById(id)) {
+            throw new BPEntityNotFoundException(Employee.class.getSimpleName(), id);
+        }
+
+        addressService.save(homeAddress);
+    }
+
+    @Transactional
+    public Integer editLicense(DriverLicense license, Long id) {
+        validationUseCaseService.driverLicenseValidation(license);
+        if (!employeeRepository.existsById(id)) {
+            throw new BPEntityNotFoundException(Employee.class.getSimpleName(), id);
+        }
+
+        return employeeRepository.editLicense(license, id);
     }
 }
 

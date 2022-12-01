@@ -1,7 +1,10 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
+import dev.tolstov.buspark.dto.EmployeeFIODTO;
 import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
+import dev.tolstov.buspark.model.Address;
+import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.service.EmployeeService;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -30,6 +34,34 @@ public class EmployeeController {
     ) {
         return ResponseEntity.ok(employeeService.getPage(page, size));
     }
+
+    @GetMapping("find-byLastName")
+    public ResponseEntity<List<Employee>> findByLastName(@RequestParam String lastName) {
+        List<Employee> employeeList = employeeService.findByLastName(lastName);
+        if (employeeList == null || employeeList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(employeeList);
+    }
+
+    @GetMapping("find-byName")
+    public ResponseEntity<List<Employee>> findByName(@RequestParam String name) {
+        List<Employee> employeeList = employeeService.findByName(name);
+        if (employeeList == null || employeeList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(employeeList);
+    }
+
+    @GetMapping("find-byMiddleName")
+    public ResponseEntity<List<Employee>> findByMiddleName(@RequestParam String middleName) {
+        List<Employee> employeeList = employeeService.findByMiddleName(middleName);
+        if (employeeList == null || employeeList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(employeeList);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> findById(@PathVariable Long id) {
@@ -69,6 +101,30 @@ public class EmployeeController {
     @PutMapping("/mechanic/{id}")
     public ResponseEntity<Employee> updateMechanic(@PathVariable Long id, @RequestBody EmployeeMechanicDTO dto) {
         return ResponseEntity.ok(employeeService.updateMechanic(id, dto));
+    }
+
+    @PatchMapping("/{id}/editFIO")
+    public ResponseEntity<String> updateFIO(
+            @PathVariable Long id,
+            @RequestBody EmployeeFIODTO dto) {
+        return ResponseEntity.ok(String.format("Rows updated: %d", employeeService.updateFIO(dto, id)));
+    }
+
+    @PatchMapping("/{id}/editHomeAddress")
+    public ResponseEntity<Void> editHomeAddress(
+            @PathVariable Long id,
+            @RequestBody Address homeAddress
+    ) {
+        employeeService.editHomeAddress(homeAddress, id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/editDriveLicense")
+    public ResponseEntity<String> editLicense(
+            @PathVariable Long id,
+            @RequestBody DriverLicense license
+    ) {
+        return ResponseEntity.ok(String.format("Rows updated: %d", employeeService.editLicense(license, id)));
     }
 
     @DeleteMapping("/{id}")

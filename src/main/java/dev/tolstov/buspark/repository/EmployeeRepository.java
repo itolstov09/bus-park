@@ -30,9 +30,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByMiddleName(String middleName);
 
     @Modifying
-    @Query( "UPDATE Employee e " +
-            "SET e.name=?1, e.lastName=?2, e.middleName=?3 " +
-            "WHERE e.id=?4" )
+    @Query( value = "UPDATE employee " +
+            "SET name=?1, last_name=?2, middle_name=?3 " +
+            "WHERE id=?4", nativeQuery = true )
     Integer updateFIO(String name, String lastName, String middleName, Long id);
 
 
@@ -41,4 +41,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
             "SET e.driverLicense=?1 " +
             "WHERE e.id=?2")
     Integer editLicense(DriverLicense license, Long id);
+
+    @Modifying
+    @Query(value = "update employee " +
+            "SET post=?1 " +
+            "WHERE id=?2", nativeQuery = true)
+    void editPost(String newPost, Long id);
+
+    @Modifying
+    @Query(value = "DELETE FROM bus_mechanic WHERE mechanic_id=?1",
+            nativeQuery = true)
+    void removeBuses(Long id);
 }

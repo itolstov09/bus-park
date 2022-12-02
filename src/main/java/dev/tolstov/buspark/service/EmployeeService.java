@@ -6,12 +6,12 @@ import dev.tolstov.buspark.dto.EmployeeMechanicDTO;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.exception.EmployeeException;
 import dev.tolstov.buspark.model.Address;
-import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.model.DriverLicense;
 import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.repository.EmployeeRepository;
 import dev.tolstov.buspark.validation.ValidationService;
 import dev.tolstov.buspark.validation.ValidationUseCaseService;
+import dev.tolstov.buspark.validation.constraints.ValueOfEnum;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -185,7 +185,7 @@ public class EmployeeService {
     @Transactional
     public Integer editLicense(DriverLicense license, Long id) {
         validationUseCaseService.driverLicenseValidation(license);
-        if (!employeeRepository.existsById(id)) {
+        if (!existById(id)) {
             throw new BPEntityNotFoundException(Employee.class.getSimpleName(), id);
         }
 
@@ -194,6 +194,35 @@ public class EmployeeService {
 
     public boolean existById(Long id) {
         return employeeRepository.existsById(id);
+    }
+
+    @Transactional
+    public void editPost(
+            @ValueOfEnum(enumClass = Employee.Post.class) String newPost,
+            @Positive Long id
+    ) {
+        Employee employee = findById(id);
+        // проверка - указана ли та же должность. если да - 400
+        String oldPost = employee.getPost().name();
+        if (newPost.equals(oldPost)) {
+            throw new EmployeeException("Employee already have post " + newPost);
+        }
+
+        // тут пока 2 варианта
+        // с механика на водителя
+        if (oldPost.equals(Employee.Post.MECHANIC.name()) && newPost.equals(Employee.Post.DRIVER.name())) {
+            //      валидация как водителя
+            validationUseCaseService.driverValidation(employee);
+            //      у механика нужно убрать обслуживаемые автобусы
+            employeeRepository.removeBuses(id);
+        }
+
+        //todo если водитель становится механиком, то можно сказать что он механик у своего же автобуса.
+        // или нужно жестко разделять должности и ответственность. либо механик либо водитель
+
+        // с водителя на механика - пока ничего проверять не нужно.. или нужно?
+
+        employeeRepository.editPost(newPost, id);
     }
 }
 

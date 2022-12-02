@@ -104,10 +104,11 @@ public class EmployeeController {
     }
 
     @PatchMapping("/{id}/editFIO")
-    public ResponseEntity<String> updateFIO(
+    public ResponseEntity<Void> updateFIO(
             @PathVariable Long id,
             @RequestBody EmployeeFIODTO dto) {
-        return ResponseEntity.ok(String.format("Rows updated: %d", employeeService.updateFIO(dto, id)));
+        employeeService.updateFIO(dto, id);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}/editHomeAddress")
@@ -125,6 +126,12 @@ public class EmployeeController {
             @RequestBody DriverLicense license
     ) {
         return ResponseEntity.ok(String.format("Rows updated: %d", employeeService.editLicense(license, id)));
+    }
+
+    @PatchMapping("/{id}/editPost")
+    public ResponseEntity<Void> editPost(@PathVariable Long id, @RequestParam String newPost ) {
+        employeeService.editPost(newPost, id);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

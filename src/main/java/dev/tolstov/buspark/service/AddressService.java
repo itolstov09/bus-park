@@ -68,4 +68,8 @@ public class AddressService {
     public Integer updateStreetAddress(@NotBlank String street, Long addressId) {
         return addressRepository.updateStreetAddress(street, addressId);
     }
+
+    public List<Address> findBusAddresses() {
+        return addressRepository.findByApartmentNumberIsNull();
+    }
 }

@@ -1,7 +1,6 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Address;
-import dev.tolstov.buspark.model.Employee;
 import dev.tolstov.buspark.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +28,15 @@ public class AddressController {
     @GetMapping("/{id}")
     public ResponseEntity<Address> findById(@PathVariable Long id) {
         return ResponseEntity.ok(addressService.findById(id));
+    }
+
+    @GetMapping("/find-busAddresses")
+    public ResponseEntity<?> findAll() {
+        List<Address> addressList = addressService.findBusAddresses();
+        if (addressList == null || addressList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(addressList);
     }
 
 

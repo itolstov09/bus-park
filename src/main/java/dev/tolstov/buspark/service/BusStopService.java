@@ -138,6 +138,10 @@ public class BusStopService {
         return addressService.updateStreetAddress(street, addressId);
     }
 
+    public boolean existById(Long busStopId) {
+        return busStopRepository.existsById(busStopId);
+    }
+
     //todo пока нет общей картины. так что ну думаю что стоит использовать удаление
 //    @Transactional
 //    public void deleteByName(@NotBlank String name) {

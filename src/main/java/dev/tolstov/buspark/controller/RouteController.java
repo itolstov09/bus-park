@@ -39,6 +39,27 @@ public class RouteController {
         return ResponseEntity.ok(routeService.update(id, routeInfo));
     }
 
+    @PatchMapping("/{id}/addBusStop")
+    public ResponseEntity<Void> addBusStop(
+            @PathVariable(name = "id") Long routeId,
+            @RequestParam Long busStopId
+    ) {
+        routeService.addBusStop(busStopId, routeId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PatchMapping("/{id}/removeBusStop")
+    public ResponseEntity<Void> removeBusStop(
+            @PathVariable(name = "id") Long routeId,
+            @RequestParam Long busStopId
+    ) {
+        routeService.removeBusStop(busStopId, routeId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
         routeService.deleteById(id);

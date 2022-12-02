@@ -79,4 +79,11 @@ public class GlobalControllerAdvice {
     String busStopException(BusStopException exception) {
         return exception.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RouteException.class)
+    String busStopException(RouteException exception) {
+        return exception.getMessage();
+    }
 }

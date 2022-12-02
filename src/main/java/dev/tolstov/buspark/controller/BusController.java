@@ -45,6 +45,44 @@ public class BusController {
         return ResponseEntity.ok(busService.update(id, dto));
     }
 
+    @PatchMapping("/{id}/addMechanic")
+    public ResponseEntity<Void> addMechanic(
+            @PathVariable(name = "id") Long busId,
+            @RequestParam Long mechanicId
+    ) {
+        busService.addMechanic(mechanicId, busId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PatchMapping("/{id}/removeMechanic")
+    public ResponseEntity<Void> removeMechanic(
+            @PathVariable(name = "id") Long busId,
+            @RequestParam Long mechanicId
+    ) {
+        busService.removeMechanic(mechanicId, busId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    @PatchMapping("/{id}/setDriver")
+    public ResponseEntity<Void> setBusDriver(
+            @PathVariable(name = "id") Long busId,
+            @RequestParam Long driverId
+    ) {
+        busService.setBusDriver(driverId, busId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/setRoute")
+    public ResponseEntity<Void> setRoute(
+            @PathVariable(name = "id") Long busId,
+            @RequestParam Long routeId
+    ) {
+        busService.setRoute(routeId, busId);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
         busService.deleteById(id);

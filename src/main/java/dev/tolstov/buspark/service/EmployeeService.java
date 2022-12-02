@@ -191,5 +191,9 @@ public class EmployeeService {
 
         return employeeRepository.editLicense(license, id);
     }
+
+    public boolean existById(Long id) {
+        return employeeRepository.existsById(id);
+    }
 }
 

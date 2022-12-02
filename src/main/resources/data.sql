@@ -42,7 +42,7 @@ insert into route_bus_stop (route_id, bus_stop_id) values (2, 4);
 
 -- BUS
 insert into bus (model, number_plate, max_passenger, driver_id) -- id 1
-    values ('PAZ', '125 ASD 02', 20, 1);
+    values ('PAZ', '125 ASD 02', 20, 5);
 insert into bus_mechanic (bus_id, mechanic_id) values (1, 1);
 insert into bus_mechanic (bus_id, mechanic_id) values (1, 3);
 

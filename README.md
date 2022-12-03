@@ -8,3 +8,9 @@
 
 Тогда нужно взять автобус из какого-нибудь маршрута на начальной или конечной остановке,
 который не сильно загружен, и добавить его в другой, более загруженный маршрут.
+
+# Диаграммы
+## Классы
+![classDiagram](https://github.com/itolstov09/bus-park/blob/84fcf315f17c72bee12669035cf7c67bb1a89ec0/docs/ClassDiagram.png)
+## Таблицы
+![tableDiagram](https://github.com/itolstov09/bus-park/blob/84fcf315f17c72bee12669035cf7c67bb1a89ec0/docs/TableDiagram.png)

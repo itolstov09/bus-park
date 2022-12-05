@@ -13,7 +13,7 @@ import javax.validation.constraints.Null;
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-public class Address {
+public class Address extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

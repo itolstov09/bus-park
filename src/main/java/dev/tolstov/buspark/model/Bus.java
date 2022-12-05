@@ -17,7 +17,7 @@ uniqueConstraints = {
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Setter @Getter
-public class Bus {
+public class Bus extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

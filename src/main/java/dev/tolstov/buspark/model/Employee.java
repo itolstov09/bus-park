@@ -17,7 +17,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
-public class Employee {
+public class Employee extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

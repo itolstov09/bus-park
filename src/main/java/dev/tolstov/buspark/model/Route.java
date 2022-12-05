@@ -18,7 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
-public class Route {
+public class Route extends BPEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

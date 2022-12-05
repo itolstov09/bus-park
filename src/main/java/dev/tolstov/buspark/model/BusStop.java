@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
-public class BusStop {
+public class BusStop extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

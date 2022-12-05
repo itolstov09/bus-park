@@ -1,0 +1,32 @@
+[
+  {
+    "modelName": "address",
+    "street": "json_st 1"
+  },
+  {
+    "modelName": "address",
+    "street": ""
+  },
+  {
+    "modelName": "address",
+    "street": "json_st 1",
+    "aga": "aga"
+  },
+  {
+    "modelName": "busStop",
+    "name": "json_bs 1",
+    "address": {
+      "modelName": "address",
+      "street": "json_bs_street 1"
+    }
+  },
+  {
+    "modelName": "busStop",
+    "name": "json_bs 2",
+    "address": {
+      "modelName": "address",
+      "street": "json_bs_street 2"
+    }
+  }
+
+]

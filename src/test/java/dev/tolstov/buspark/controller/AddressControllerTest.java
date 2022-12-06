@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,20 +42,21 @@ public class AddressControllerTest {
 
     @Test
     public void whenGetAddresses_thenReturnOK() throws Exception {
-        given(addressService.findAll()).willReturn(addresses);
+        PageImpl<Address> addressesPage = new PageImpl<>(this.addresses);
+        given(addressService.getPage(0,10)).willReturn(addressesPage);
         mockMvc.perform(
-                get("/api/v1/addresses")
+                get("/api/v1/addresses?page=0&size=10")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void whenGetEmptyAddressList_thenReturnNoContent() throws Exception {
-        when(addressService.findAll()).thenReturn(List.of());
+    public void whenGetEmptyAddressList_thenReturnOK() throws Exception {
+        when(addressService.getPage(0, 10)).thenReturn(null);
         mockMvc.perform(
-                        get("/api/v1/addresses")
+                        get("/api/v1/addresses?page=0&size=10")
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
     }
 
     @Test

@@ -12,6 +12,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,18 +51,19 @@ public class BusStopControllerTest {
     public void whenGetAllBusStops_thenStatusOK() throws Exception {
         BusStop bs1 = new BusStop("Bus stop 1");
         BusStop bs2 = new BusStop("Bus stop 2");
+        Page<BusStop> busStops = new PageImpl<>(List.of(bs1, bs2));
 
-        when(busStopService.findAll()).thenReturn(List.of(bs1, bs2));
-        mockMvc.perform(get("/api/v1/busStops").contentType(MediaType.APPLICATION_JSON) )
+        when(busStopService.getPage(0, 10)).thenReturn(busStops);
+        mockMvc.perform(get("/api/v1/busStops?page=0&size=10").contentType(MediaType.APPLICATION_JSON) )
                 .andExpect(status().isOk());
     }
 
     // get all: empty - no content
     @Test
-    public void whenGetEmptyList_thenStatusNoContent() throws Exception {
-        when(busStopService.findAll()).thenReturn(List.of());
-        mockMvc.perform(get("/api/v1/busStops").contentType(MediaType.APPLICATION_JSON) )
-                .andExpect(status().isNoContent());
+    public void whenGetEmptyList_thenStatusOK() throws Exception {
+        when(busStopService.getPage(0, 10)).thenReturn(null);
+        mockMvc.perform(get("/api/v1/busStops?page=0&size=10").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     // get byId: valid - ok

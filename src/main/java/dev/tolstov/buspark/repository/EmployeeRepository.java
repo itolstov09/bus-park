@@ -52,4 +52,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(value = "DELETE FROM bus_mechanic WHERE mechanic_id=?1",
             nativeQuery = true)
     void removeBuses(Long id);
+
+    long countByHomeAddress(Address address);
 }

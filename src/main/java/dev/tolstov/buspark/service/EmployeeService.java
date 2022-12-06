@@ -179,14 +179,26 @@ public class EmployeeService {
     }
 
 
+    /**
+     * Редактирует адрес сотрудника. Если на данном адресе проживают несколько человек, то вместо редактирования
+     * происходит создание новой записи об адресе
+     * @param homeAddress
+     * @param id
+     */
     public void editHomeAddress(Address homeAddress, Long id) {
         validationUseCaseService.employeeAddressValidation(homeAddress);
 
-        if (!employeeRepository.existsById(id)) {
-            throw new BPEntityNotFoundException(Employee.class.getSimpleName(), id);
+        Employee employee = findById(id);
+//        получить количество человек, проживающих по адресу
+//        если количество больше одного, то создаем новую запись
+        if (employeeRepository.countByHomeAddress(homeAddress) > 1) {
+            Address newAddress = new Address();
+            BeanUtils.copyProperties(homeAddress, newAddress, "id");
+            employee.setHomeAddress(newAddress);
+            save(employee);
+        } else {
+            addressService.save(homeAddress);
         }
-
-        addressService.save(homeAddress);
     }
 
     @Transactional

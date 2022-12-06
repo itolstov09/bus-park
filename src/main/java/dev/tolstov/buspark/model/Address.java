@@ -11,8 +11,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 @Entity
-@Getter @Setter
 @NoArgsConstructor
+@Getter @Setter
+@ToString
 public class Address extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id

@@ -86,4 +86,11 @@ public class GlobalControllerAdvice {
     String busStopException(RouteException exception) {
         return exception.getMessage();
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(JsonServiceException.class)
+    String busStopException(JsonServiceException exception) {
+        return exception.getMessage();
+    }
 }

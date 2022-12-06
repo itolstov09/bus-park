@@ -12,7 +12,7 @@ public class TestController {
 
     @GetMapping("/rpc/loadFromJSON")
     public void loadFromJSON() {
-        jsonService.load();
+        jsonService.loadAndSaveToDB();
     }
 
 }

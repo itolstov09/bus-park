@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter @Setter
+@ToString
 public class BusStop extends BPEntity {
     @Setter(AccessLevel.NONE)
     @Id

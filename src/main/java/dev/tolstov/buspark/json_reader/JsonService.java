@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityExistsException;
 import javax.validation.ConstraintViolationException;
@@ -26,8 +27,6 @@ import java.util.Set;
 
 @Service
 public class JsonService {
-    @Value("classpath:/import.json")
-    Resource importResource;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -52,14 +51,15 @@ public class JsonService {
      * - Не удалось смаппить json-объект к модели - нет такой модели в списке разрешенных
      * - Ошибка валидации при сохранении в БД
      *
+     * @param file Multipart файл.
      */
     @Transactional
-    public void loadAndSaveToDB() {
+    public void loadAndSaveToDB(MultipartFile file) {
         try {
             List<BPEntity> list = new ArrayList<>();
 
             InputStreamReader streamReader = new InputStreamReader(
-                    importResource.getInputStream(), StandardCharsets.UTF_8);
+                    file.getInputStream(), StandardCharsets.UTF_8);
             JsonNode tree = objectMapper.readTree(streamReader);
             tree.forEach(jsonNode -> {
                 try {

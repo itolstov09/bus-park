@@ -60,19 +60,28 @@ public class BusStopService {
 //                );
 //            }
 //        }
-        String busStopName = busStop.getName();
+        checkUniqueValues(busStop);
+
+        addressService.save(busStop.getAddress());
+        return busStopRepository.save(busStop);
+    }
+
+    private void checkUniqueValues(BusStop busStop) {
         Long busStopId = busStop.getId();
-        Long idByName = busStopRepository.getIdByName(busStopName);
-        if ( busStopId == null && busStopRepository.existsByName(busStopName)
-                || idByName != null && !Objects.equals(idByName, busStopId)
-        ) {
+
+        String busStopName = busStop.getName();
+        if (existByName(busStopName, busStopId)) {
             throw new EntityExistsException(
                     String.format("Bus stop with name \"%s\" exists!", busStopName)
             );
         }
 
-        addressService.save(busStop.getAddress());
-        return busStopRepository.save(busStop);
+    }
+
+    private boolean existByName(String busStopName, Long busStopId) {
+        Long idByName = busStopRepository.getIdByName(busStopName);
+        return ( busStopId == null && busStopRepository.existsByName(busStopName)
+                || idByName != null && !Objects.equals(idByName, busStopId) );
     }
 
     public List<BusStop> findAll() {
@@ -118,6 +127,10 @@ public class BusStopService {
 
     @Transactional
     public Integer editName(@NotBlank String name, @Positive Long id) {
+        if (existByName(name, id)) {
+            throw new EntityExistsException(
+                    String.format("Cannot set bus stop name: bus stop with name '%s' exists", name) );
+        }
         return busStopRepository.editName(name, id);
     }
 

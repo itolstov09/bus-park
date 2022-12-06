@@ -115,20 +115,25 @@ public class EmployeeService {
         //todo как по мне тут потенциальный баг. Если обновлять данные одного водителя и
         // подставить лицензию другого, то выдаст 500. Поскольку проверка по ID лицензии скорее всего не произойдет
         if (license != null) {
-            Long employeeId = employee.getId();
-            String licenseID = license.getLicenseID();
-            Long idByLicenseID = employeeRepository.getIdByLicenseID(licenseID);
-            if ( employeeId == null && employeeRepository.existsByDriverLicenseLicenseID(licenseID)
-                    || idByLicenseID != null && !Objects.equals(idByLicenseID, employeeId)
-            ) {
-                throw new EntityExistsException("Cannot save employee with exist driver license");
-            }
+            checkUniqueValues(employee, license);
         }
         Address homeAddress = employee.getHomeAddress();
         validationUseCaseService.employeeAddressValidation(homeAddress);
 
         addressService.save(homeAddress);
         return employeeRepository.save(employee);
+    }
+
+    private void checkUniqueValues(Employee employee, DriverLicense license) {
+        Long employeeId = employee.getId();
+        String licenseID = license.getLicenseID();
+        Long idByLicenseID = employeeRepository.getIdByLicenseID(licenseID);
+        if ( employeeId == null && employeeRepository.existsByDriverLicenseLicenseID(licenseID)
+                || idByLicenseID != null && !Objects.equals(idByLicenseID, employeeId)
+        ) {
+            throw new EntityExistsException("Cannot save employee with exist driver license");
+        }
+
     }
 
     private Employee mapMechanicDTOtoEmployee(EmployeeMechanicDTO mechanic) {
@@ -187,9 +192,8 @@ public class EmployeeService {
     @Transactional
     public Integer editLicense(DriverLicense license, Long id) {
         validationUseCaseService.driverLicenseValidation(license);
-        if (!existById(id)) {
-            throw new BPEntityNotFoundException(Employee.class.getSimpleName(), id);
-        }
+        Employee employee = findById(id);
+        checkUniqueValues(employee, license);
 
         return employeeRepository.editLicense(license, id);
     }

@@ -124,8 +124,10 @@ public class EmployeeService {
                 throw new EntityExistsException("Cannot save employee with exist driver license");
             }
         }
+        Address homeAddress = employee.getHomeAddress();
+        validationUseCaseService.employeeAddressValidation(homeAddress);
 
-        addressService.save(employee.getHomeAddress());
+        addressService.save(homeAddress);
         return employeeRepository.save(employee);
     }
 

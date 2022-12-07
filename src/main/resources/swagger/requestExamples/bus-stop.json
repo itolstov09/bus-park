@@ -1,12 +1,55 @@
 [
   {
-    "exampleKey": "PUT-200",
+    "exampleKey": "POST-201-ex1",
+    "description": "Valid bus stop request body",
+    "requestBody": {
+      "name": "bus stop name",
+      "address": {
+        "street": "bus stop address"
+      }
+    }
+  },
+  {
+    "exampleKey": "POST-201-ex2",
+    "description": "Valid bus stop with exist address",
+    "requestBody": {
+      "name": "bus stop name",
+      "address": {
+        "id": 1,
+        "street": "bus stop address"
+      }
+    }
+  },
+  {
+    "exampleKey": "POST-400",
+    "description": "Invalid bus stop body - set employee address",
+    "requestBody": {
+      "name": "bus stop name",
+      "address": {
+        "street": "employee home address",
+        "apartmentNumber": 18
+      }
+    }
+  },
+  {
+    "exampleKey": "PUT-200-ex1",
     "description": "Valid bus stop request body",
     "requestBody": {
       "id": 1,
       "name": "bus stop name",
       "address": {
         "id": 1,
+        "street": "bus stop address"
+      }
+    }
+  },
+  {
+    "exampleKey": "PUT-200-ex2",
+    "description": "Valid bus stop without address id",
+    "requestBody": {
+      "id": 1,
+      "name": "bus stop name",
+      "address": {
         "street": "bus stop address"
       }
     }

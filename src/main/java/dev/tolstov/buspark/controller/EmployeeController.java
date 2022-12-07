@@ -69,13 +69,38 @@ public class EmployeeController {
     }
 
     @PostMapping("/driver")
-    public ResponseEntity<Employee> saveDriver(@RequestBody EmployeeDriverDTO dto) {
+    public ResponseEntity<Employee> saveDriver(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid",
+                                    ref = "#/components/examples/employee-driver-POST-201"),
+                            @ExampleObject(
+                                    name = "invalid",
+                                    ref = "#/components/examples/employee-driver-POST-400")
+                    }
+                    ) )
+            @RequestBody EmployeeDriverDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(employeeService.createDriver(dto));
     }
 
     @PostMapping("/mechanic")
-    public ResponseEntity<Employee> saveMechanic( @RequestBody EmployeeMechanicDTO mechanic ) {
+    public ResponseEntity<Employee> saveMechanic(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid 1",
+                                    ref = "#/components/examples/employee-mechanic-POST-201-ex1"),
+                            @ExampleObject(
+                                    name = "valid 2",
+                                    ref = "#/components/examples/employee-mechanic-POST-201-ex2"),
+                            @ExampleObject(
+                                    name = "invalid",
+                                    ref = "#/components/examples/employee-mechanic-POST-400")
+                    }
+                    ) )
+            @RequestBody EmployeeMechanicDTO mechanic ) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(employeeService.createMechanic(mechanic));
     }
@@ -106,6 +131,15 @@ public class EmployeeController {
     @PatchMapping("/{id}/editFIO")
     public ResponseEntity<Void> updateFIO(
             @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid 1",
+                                    ref = "#/components/examples/employee-PATCH-editFIO-204-ex1"),
+                            @ExampleObject(
+                                    name = "valid 2",
+                                    ref = "#/components/examples/employee-PATCH-editFIO-204-ex2")
+                    } ) )
             @RequestBody EmployeeFIODTO dto) {
         employeeService.updateFIO(dto, id);
         return ResponseEntity.noContent().build();
@@ -114,6 +148,11 @@ public class EmployeeController {
     @PatchMapping("/{id}/editHomeAddress")
     public ResponseEntity<Void> editHomeAddress(
             @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid",
+                                    ref = "#/components/examples/employee-PATCH-editHomeAddress-204") } ) )
             @RequestBody Address homeAddress
     ) {
         employeeService.editHomeAddress(homeAddress, id);

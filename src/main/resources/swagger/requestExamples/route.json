@@ -1,0 +1,52 @@
+[
+  {
+    "exampleKey": "POST-201-ex1",
+    "description": "Valid route with nested entity ids",
+    "requestBody": {
+      "routeNumber": 1000,
+      "busStops": [
+        {
+          "id": 2,
+          "name": "example Bus stop 2",
+          "address": {
+            "id": 4,
+            "street": "BS 2 adr",
+            "apartmentNumber": null
+          }
+        },
+        {
+          "id": 1,
+          "name": "example Bus stop 1",
+          "address": {
+            "id": 3,
+            "street": "BS 1 adr",
+            "apartmentNumber": null
+          }
+        }
+      ]
+    }
+  },
+  {
+    "exampleKey": "POST-201-ex2",
+    "description": "Valid route",
+    "requestBody": {
+      "routeNumber": 1001,
+      "busStops": [
+        {
+          "name": "example Bus stop ",
+          "address": {
+            "street": "example BS adr",
+            "apartmentNumber": null
+          }
+        },
+        {
+          "name": "example Bus stop 2",
+          "address": {
+            "street": "example BS 2 adr",
+            "apartmentNumber": null
+          }
+        }
+      ]
+    }
+  }
+]

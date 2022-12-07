@@ -2,6 +2,8 @@ package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Route;
 import dev.tolstov.buspark.service.RouteService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,19 @@ public class RouteController {
     }
 
     @PostMapping
-    public ResponseEntity<Route> save(@RequestBody Route route) {
+    public ResponseEntity<Route> save(
+
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid 1",
+                                    ref = "#/components/examples/route-POST-201-ex1"),
+                            @ExampleObject(
+                                    name = "valid 2",
+                                    ref = "#/components/examples/route-POST-201-ex2")
+                    }
+                    ) )
+            @RequestBody Route route) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(routeService.save(route));
     }

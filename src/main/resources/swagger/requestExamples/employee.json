@@ -1,5 +1,101 @@
 [
   {
+    "exampleKey": "driver-POST-201",
+    "description": "Valid driver",
+    "requestBody": {
+      "name": "string",
+      "lastName": "string",
+      "middleName": "string",
+      "salary": 10000.0,
+      "homeAddress": {
+        "street": "string",
+        "apartmentNumber": 1
+      },
+      "post": "DRIVER",
+      "driverLicense": {
+        "licenseID": "string",
+        "licenseCategories": "string"
+      }
+    }
+  },
+
+  {
+    "exampleKey": "driver-POST-400",
+    "description": "Invalid driver",
+    "requestBody": {
+      "name": "",
+      "lastName": "",
+      "middleName": "",
+      "salary": -1.0,
+      "homeAddress": {
+        "id": 1,
+        "street": "string"
+      },
+      "post": "MECHANIC",
+      "driverLicense": {
+        "licenseID": "",
+        "licenseCategories": ""
+      }
+    }
+  },
+
+
+  {
+    "exampleKey": "mechanic-POST-201-ex1",
+    "description": "Valid - without driver license",
+    "requestBody": {
+      "name": "string",
+      "lastName": "string",
+      "middleName": "string",
+      "salary": 10000.0,
+      "homeAddress": {
+        "street": "string",
+        "apartmentNumber": 1
+      },
+      "post": "MECHANIC"
+    }
+  },
+  {
+    "exampleKey": "mechanic-POST-201-ex2",
+    "description": "Valid with driver license",
+    "requestBody": {
+      "name": "string",
+      "lastName": "string",
+      "middleName": "string",
+      "salary": 10000.0,
+      "homeAddress": {
+        "street": "string",
+        "apartmentNumber": 1
+      },
+      "post": "MECHANIC",
+      "driverLicense": {
+        "licenseID": "string",
+        "licenseCategories": "string"
+      }
+    }
+  },
+  {
+    "exampleKey": "mechanic-POST-400",
+    "description": "Invalid mechanic",
+    "requestBody": {
+      "name": "",
+      "lastName": "",
+      "middleName": "",
+      "salary": -1.0,
+      "homeAddress": {
+        "id": 1,
+        "street": "string"
+      },
+      "post": "DRIVER",
+      "driverLicense": {
+        "licenseID": "",
+        "licenseCategories": ""
+      }
+    }
+  },
+
+
+  {
     "exampleKey": "driver-PUT-200",
     "description": "Valid driver",
     "requestBody": {
@@ -20,6 +116,7 @@
       }
     }
   },
+
   {
     "exampleKey": "driver-PUT-400",
     "description": "Invalid driver",
@@ -28,7 +125,7 @@
       "name": "",
       "lastName": "",
       "middleName": "",
-      "salary": 10000.0,
+      "salary": -1.0,
       "homeAddress": {
         "id": 1,
         "street": "string"
@@ -39,5 +136,45 @@
         "licenseCategories": ""
       }
     }
+  },
+
+  {
+    "exampleKey": "PATCH-editFIO-204-ex1",
+    "description": "valid full",
+    "requestBody": {
+      "name": "string",
+      "lastName": "string",
+      "middleName": "string"
+    }
+  },
+
+  {
+    "exampleKey": "PATCH-editFIO-204-ex2",
+    "description": "valid without middle name",
+    "requestBody": {
+      "name": "string",
+      "lastName": "string"
+    }
+  },
+
+  {
+    "exampleKey": "PATCH-editHomeAddress-204",
+    "description": "valid",
+    "requestBody": {
+      "id": 1,
+      "street": "string",
+      "apartmentNumber": 1
+    }
+  },
+
+  {
+    "exampleKey": "PATCH-editHomeAddress-204",
+    "description": "valid",
+    "requestBody": {
+      "id": 1,
+      "street": "string",
+      "apartmentNumber": 1
+    }
   }
+
 ]

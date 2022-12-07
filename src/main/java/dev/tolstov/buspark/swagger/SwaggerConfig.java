@@ -25,6 +25,9 @@ public class SwaggerConfig {
     @Value("classpath:/swagger/requestExamples/employee.json")
     Resource employeeRequestResource;
 
+    @Value("classpath:/swagger/requestExamples/route.json")
+    Resource routeRequestResource;
+
 
     @Bean
     public OpenApiCustomiser openApiCustomiser() {
@@ -32,7 +35,8 @@ public class SwaggerConfig {
 
         List<Resource> resourceList = List.of(
                 this.busStopRequestsResource,
-                this.employeeRequestResource
+                this.employeeRequestResource,
+                this.routeRequestResource
         );
         Map<String, Example> examples = new HashMap<>();
         resourceList.forEach(resource -> {

@@ -52,7 +52,19 @@ public class BusStopController {
     public ResponseEntity<BusStop> save(
             @RequestBody
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Caution: Bus stop address apartment number must be null")
+                    description = "Caution: Bus stop address apartment number must be null",
+                    content = @Content(examples = {
+                            @ExampleObject(
+                                    name = "valid",
+                                    ref = "#/components/examples/bus-stop-POST-201-ex1"),
+                            @ExampleObject(
+                                    name = "valid without address id",
+                                    ref = "#/components/examples/bus-stop-POST-201-ex2"),
+                            @ExampleObject(
+                                    name = "invalid",
+                                    ref = "#/components/examples/bus-stop-POST-400")
+                    }
+            ) )
             BusStop newBusStop
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -67,7 +79,10 @@ public class BusStopController {
             content = @Content(examples = {
                     @ExampleObject(
                             name = "valid",
-                            ref = "#/components/examples/bus-stop-PUT-200"),
+                            ref = "#/components/examples/bus-stop-PUT-200-ex1"),
+                    @ExampleObject(
+                            name = "valid without address id",
+                            ref = "#/components/examples/bus-stop-PUT-200-ex2"),
                     @ExampleObject(
                             name = "invalid",
                             ref = "#/components/examples/bus-stop-PUT-400")

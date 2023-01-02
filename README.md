@@ -11,6 +11,6 @@
 
 # Диаграммы
 ## Классы
-![classDiagram](https://github.com/itolstov09/bus-park/blob/84fcf315f17c72bee12669035cf7c67bb1a89ec0/docs/ClassDiagram.png)
+![classDiagram](docs/ClassDiagram.png)
 ## Таблицы
-![tableDiagram](https://github.com/itolstov09/bus-park/blob/84fcf315f17c72bee12669035cf7c67bb1a89ec0/docs/TableDiagram.png)
+![tableDiagram](docs/TableDiagram.png)

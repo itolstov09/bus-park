@@ -23,12 +23,12 @@ public class BusTest extends EntityTest {
     @Test
     void whenSaveBusWithExistsNumberPlate_thenThrowsException() {
         assertThrows(EntityExistsException.class, () -> {
-            Bus busFromDB = busService.findAll().get(0);
+            Bus busFromDB = busServiceImpl.findAll().get(0);
             String numberPlate = busFromDB.getNumberPlate();
             Bus newBus = new Bus("model", numberPlate, 20);
             BusDTO busDTO = new BusDTO();
             BeanUtils.copyProperties(newBus, busDTO);
-            busService.create(busDTO); }
+            busServiceImpl.create(busDTO); }
         );
     }
 
@@ -38,10 +38,10 @@ public class BusTest extends EntityTest {
     void testAddEmployeeWithoutLicenseCannotBeBusDriver() {
         EmployeeException employeeException = assertThrows(EmployeeException.class,
                 () -> {
-                    Employee employee = employeeService.findAll().get(0);
+                    Employee employee = employeeServiceImpl.findAll().get(0);
                     employee.setDriverLicense(null);
-                    Bus bus = busService.findAll().get(0);
-                    busService.setDriver(bus, employee);
+                    Bus bus = busServiceImpl.findAll().get(0);
+                    busServiceImpl.setDriver(bus, employee);
                 });
         assertTrue(employeeException.getMessage().endsWith("Reason: don't have a license!"));
     }
@@ -78,15 +78,15 @@ public class BusTest extends EntityTest {
     @Test
     void givenBusWithDriver_whenSetDriver_thenDriverChanged() {
         //given
-        Employee mechanic = employeeService.findFirstByPost(Employee.Post.MECHANIC);
+        Employee mechanic = employeeServiceImpl.findFirstByPost(Employee.Post.MECHANIC);
         DriverLicense driverLicense = new DriverLicense("123", "D");
         mechanic.setDriverLicense(driverLicense);
-        Bus bus = busService.findAll().get(0);
+        Bus bus = busServiceImpl.findAll().get(0);
         //when
         Employee oldDriver = bus.getDriver();
-        busService.setDriver(bus, mechanic);
+        busServiceImpl.setDriver(bus, mechanic);
         //then
-        Bus busById = busService.findById(bus.getId());
+        Bus busById = busServiceImpl.findById(bus.getId());
         assertNotEquals(busById.getDriver(), oldDriver);
     }
 }

@@ -1,7 +1,7 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
-import dev.tolstov.buspark.service.EmployeeService;
+import dev.tolstov.buspark.service.EmployeeServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class EmployeeTest extends EntityTest {
 
     @Autowired
-    EmployeeService employeeService;
+    EmployeeServiceImpl employeeServiceImpl;
 
 
     @Test
     void testTwoEmployeesCanHaveSameAddress() {
-        List<Employee> employeeList = employeeService.findAll();
+        List<Employee> employeeList = employeeServiceImpl.findAll();
         assertEquals(
                 employeeList.get(0).getHomeAddress().getStreet(),
                 employeeList.get(1).getHomeAddress().getStreet()
@@ -41,7 +41,7 @@ public class EmployeeTest extends EntityTest {
                     newEmployee.setHomeAddress(address);
                     BeanUtils.copyProperties(newEmployee, driverDTO);
                     driverDTO.setPost(Employee.Post.DRIVER.name());
-                    employeeService.createDriver(driverDTO);
+                    employeeServiceImpl.createDriver(driverDTO);
                 });
     }
 
@@ -57,7 +57,7 @@ public class EmployeeTest extends EntityTest {
                             "L",
                             12.2,
                             Employee.Post.MECHANIC);
-                    employeeService.save(newEmployee,
+                    employeeServiceImpl.save(newEmployee,
                             new Address("s", null));
                 } );
     }

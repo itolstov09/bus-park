@@ -11,19 +11,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public abstract class EntityTest {
     @Autowired
-    AddressService addressService;
+    AddressServiceImpl addressServiceImpl;
 
     @Autowired
-    EmployeeService employeeService;
+    EmployeeServiceImpl employeeServiceImpl;
 
     @Autowired
-    BusStopService busStopService;
+    BusStopServiceImpl busStopServiceImpl;
 
     @Autowired
-    RouteService routeService;
+    RouteServiceImpl routeServiceImpl;
 
     @Autowired
-    BusService busService;
+    BusServiceImpl busServiceImpl;
 
     @Autowired
     TestEntityService testEntityService;
@@ -40,23 +40,23 @@ public abstract class EntityTest {
     }
 
     private void clearTables() {
-        routeService.deleteAll();
-        busService.deleteAll();
-        employeeService.deleteAll();
-        busStopService.deleteAll();
-        addressService.deleteAll();
+        routeServiceImpl.deleteAll();
+        busServiceImpl.deleteAll();
+        employeeServiceImpl.deleteAll();
+        busStopServiceImpl.deleteAll();
+        addressServiceImpl.deleteAll();
     }
 
     private void storeEntities() {
         Address street = new Address("street", 15);
-        addressService.save(street);
+        addressServiceImpl.save(street);
 
         Employee dmitry = new Employee("TDmitry", "TIvanoff", 12000.0, Employee.Post.MECHANIC);
-        employeeService.save(dmitry, street);
+        employeeServiceImpl.save(dmitry, street);
         Employee mechanic2 = new Employee("TMechanic2", "TIvanoff", 12000.0, Employee.Post.MECHANIC);
-        employeeService.save(mechanic2, street);
+        employeeServiceImpl.save(mechanic2, street);
         Employee mechanic3 = new Employee("TMechanic3", "TIvanoff", 12000.0, Employee.Post.MECHANIC);
-        employeeService.save(mechanic3, street);
+        employeeServiceImpl.save(mechanic3, street);
 
         DriverLicense ivanDL = new DriverLicense("tasdf1234", "D");
         EmployeeDriverDTO ivanDTO = new EmployeeDriverDTO(
@@ -66,7 +66,7 @@ public abstract class EntityTest {
                 street,
                 Employee.Post.DRIVER.name(),
                 ivanDL);
-        Employee ivan = employeeService.createDriver(ivanDTO);
+        Employee ivan = employeeServiceImpl.createDriver(ivanDTO);
 
         DriverLicense driverLicense = new DriverLicense("tsdafsda1415", "D");
         EmployeeDriverDTO driver2DTO = new EmployeeDriverDTO(
@@ -76,12 +76,12 @@ public abstract class EntityTest {
                 street,
                 Employee.Post.DRIVER.name(),
                 driverLicense);
-        Employee driver2 = employeeService.createDriver(driver2DTO);
+        Employee driver2 = employeeServiceImpl.createDriver(driver2DTO);
 
         Address busStopAddress = new Address("TBus stop address", null);
         BusStop busStop = new BusStop("Tbus stop");
         busStop.setAddress(busStopAddress);
-        busStopService.save(busStop);
+        busStopServiceImpl.save(busStop);
 
         Address busStop2Address = new Address("TBS_2 adr", null);
         Address busStop3Address = new Address("TBS_3 adr", null);
@@ -89,24 +89,24 @@ public abstract class EntityTest {
 
         BusStop busStop2 = new BusStop("Test Bus stop 2");
         busStop2.setAddress(busStop2Address);
-        busStopService.save(busStop2);
+        busStopServiceImpl.save(busStop2);
 
         BusStop busStop3 = new BusStop("Test Bus stop 3");
         busStop3.setAddress(busStop3Address);
-        busStopService.save(busStop3);
+        busStopServiceImpl.save(busStop3);
 
         Route route1 = new Route(1001);
-        route1.addBusStop(busStopService.findAll().get(0));
-        route1.addBusStop(busStopService.findAll().get(1));
-        routeService.save(route1);
+        route1.addBusStop(busStopServiceImpl.findAll().get(0));
+        route1.addBusStop(busStopServiceImpl.findAll().get(1));
+        routeServiceImpl.save(route1);
 
         BusStop busStop4 = new BusStop("Test Bus stop 4");
         busStop4.setAddress(busStop4Address);
-        busStopService.save(busStop4);
+        busStopServiceImpl.save(busStop4);
         Route route2 = new Route(1051);
         route2.addBusStop(busStop4);
-        route2.addBusStop(busStopService.findAll().get(0));
-        routeService.save(route2);
+        route2.addBusStop(busStopServiceImpl.findAll().get(0));
+        routeServiceImpl.save(route2);
 
 
         // TODO переписать с использованием CRUD

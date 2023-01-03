@@ -7,11 +7,9 @@ import dev.tolstov.buspark.exception.JsonServiceException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BPEntity;
 import dev.tolstov.buspark.model.BusStop;
-import dev.tolstov.buspark.service.AddressService;
-import dev.tolstov.buspark.service.BusStopService;
+import dev.tolstov.buspark.service.AddressServiceImpl;
+import dev.tolstov.buspark.service.BusStopServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +30,9 @@ public class JsonService {
     ObjectMapper objectMapper;
 
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressServiceImpl;
     @Autowired
-    private BusStopService busStopService;
+    private BusStopServiceImpl busStopServiceImpl;
 
     private final Set<String> models = Set.of(
             "address",
@@ -116,9 +114,9 @@ public class JsonService {
         list.forEach(entity -> {
             try {
                 if (entity instanceof Address) {
-                    addressService.save((Address) entity);
+                    addressServiceImpl.save((Address) entity);
                 } else if (entity instanceof BusStop) {
-                    busStopService.save((BusStop) entity);
+                    busStopServiceImpl.save((BusStop) entity);
                 } else {
                     throw new RuntimeException("Unexpected class on saving from JSON");
                 }

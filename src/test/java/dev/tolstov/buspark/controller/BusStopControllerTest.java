@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
-import dev.tolstov.buspark.service.BusStopService;
+import dev.tolstov.buspark.service.BusStopServiceImpl;
 import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ public class BusStopControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    BusStopService busStopService;
+    BusStopServiceImpl busStopServiceImpl;
 
     // get all: valid - ok
     // get all: empty - no content
@@ -53,7 +53,7 @@ public class BusStopControllerTest {
         BusStop bs2 = new BusStop("Bus stop 2");
         Page<BusStop> busStops = new PageImpl<>(List.of(bs1, bs2));
 
-        when(busStopService.getPage(0, 10)).thenReturn(busStops);
+        when(busStopServiceImpl.getPage(0, 10)).thenReturn(busStops);
         mockMvc.perform(get("/api/v1/busStops?page=0&size=10").contentType(MediaType.APPLICATION_JSON) )
                 .andExpect(status().isOk());
     }
@@ -61,7 +61,7 @@ public class BusStopControllerTest {
     // get all: empty - no content
     @Test
     public void whenGetEmptyList_thenStatusOK() throws Exception {
-        when(busStopService.getPage(0, 10)).thenReturn(null);
+        when(busStopServiceImpl.getPage(0, 10)).thenReturn(null);
         mockMvc.perform(get("/api/v1/busStops?page=0&size=10").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -71,7 +71,7 @@ public class BusStopControllerTest {
     public void whenGetByExistId_thenStatusOK() throws Exception {
         BusStop bs1 = new BusStop("Bus stop 1");
 
-        when(busStopService.findById(Mockito.anyLong())).thenReturn(bs1);
+        when(busStopServiceImpl.findById(Mockito.anyLong())).thenReturn(bs1);
         mockMvc.perform(get("/api/v1/busStops/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -80,7 +80,7 @@ public class BusStopControllerTest {
     // get byId: invalid - not found
     @Test
     public void whenA_thenB() throws Exception {
-        when(busStopService.findById(Mockito.anyLong())).thenThrow(BPEntityNotFoundException.class);
+        when(busStopServiceImpl.findById(Mockito.anyLong())).thenThrow(BPEntityNotFoundException.class);
         mockMvc.perform(
                         get("/api/v1/busStops/1")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -93,7 +93,7 @@ public class BusStopControllerTest {
         BusStop bs1 = new BusStop("Bus stop 1");
         bs1.setAddress(new Address("s", null));
 
-        when(busStopService.save(any(BusStop.class))).thenReturn(bs1);
+        when(busStopServiceImpl.save(any(BusStop.class))).thenReturn(bs1);
         mockMvc.perform(
                         post("/api/v1/busStops")
                                 .contentType(MediaType.APPLICATION_JSON)

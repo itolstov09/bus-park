@@ -1,7 +1,7 @@
 package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.model.Route;
-import dev.tolstov.buspark.service.RouteService;
+import dev.tolstov.buspark.service.RouteServiceImpl;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/routes")
 public class RouteController {
     @Autowired
-    RouteService routeService;
+    RouteServiceImpl routeServiceImpl;
 
 
     @GetMapping
@@ -22,12 +22,12 @@ public class RouteController {
             @RequestParam Integer page,
             @RequestParam Integer size
     ) {
-        return ResponseEntity.ok(routeService.getPage(page, size));
+        return ResponseEntity.ok(routeServiceImpl.getPage(page, size));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Route> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(routeService.findById(id));
+        return ResponseEntity.ok(routeServiceImpl.findById(id));
     }
 
     @PostMapping
@@ -45,12 +45,12 @@ public class RouteController {
                     ) )
             @RequestBody Route route) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(routeService.save(route));
+                .body(routeServiceImpl.save(route));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Route> update(@PathVariable Long id, @RequestBody Route routeInfo) {
-        return ResponseEntity.ok(routeService.update(id, routeInfo));
+        return ResponseEntity.ok(routeServiceImpl.update(id, routeInfo));
     }
 
     @PatchMapping("/{id}/addBusStop")
@@ -58,7 +58,7 @@ public class RouteController {
             @PathVariable(name = "id") Long routeId,
             @RequestParam Long busStopId
     ) {
-        routeService.addBusStop(busStopId, routeId);
+        routeServiceImpl.addBusStop(busStopId, routeId);
         return ResponseEntity.noContent().build();
 
     }
@@ -68,7 +68,7 @@ public class RouteController {
             @PathVariable(name = "id") Long routeId,
             @RequestParam Long busStopId
     ) {
-        routeService.removeBusStop(busStopId, routeId);
+        routeServiceImpl.removeBusStop(busStopId, routeId);
         return ResponseEntity.noContent().build();
 
     }
@@ -76,7 +76,7 @@ public class RouteController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Long id) {
-        routeService.deleteById(id);
+        routeServiceImpl.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

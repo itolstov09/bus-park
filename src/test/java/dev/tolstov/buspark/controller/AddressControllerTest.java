@@ -2,7 +2,7 @@ package dev.tolstov.buspark.controller;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
 import dev.tolstov.buspark.model.Address;
-import dev.tolstov.buspark.service.AddressService;
+import dev.tolstov.buspark.service.AddressServiceImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -30,7 +30,7 @@ public class AddressControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    AddressService addressService;
+    AddressServiceImpl addressServiceImpl;
 
     private final Address validEmployeeAddress = new Address("Street", 47);
     private final Address validBusStopAddress =  new Address("Street", null);
@@ -43,7 +43,7 @@ public class AddressControllerTest {
     @Test
     public void whenGetAddresses_thenReturnOK() throws Exception {
         PageImpl<Address> addressesPage = new PageImpl<>(this.addresses);
-        given(addressService.getPage(0,10)).willReturn(addressesPage);
+        given(addressServiceImpl.getPage(0,10)).willReturn(addressesPage);
         mockMvc.perform(
                 get("/api/v1/addresses?page=0&size=10")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -52,7 +52,7 @@ public class AddressControllerTest {
 
     @Test
     public void whenGetEmptyAddressList_thenReturnOK() throws Exception {
-        when(addressService.getPage(0, 10)).thenReturn(null);
+        when(addressServiceImpl.getPage(0, 10)).thenReturn(null);
         mockMvc.perform(
                         get("/api/v1/addresses?page=0&size=10")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -61,7 +61,7 @@ public class AddressControllerTest {
 
     @Test
     public void whenGetAddress_thenReturnOK() throws Exception {
-        when(addressService.findById(Mockito.anyLong())).thenReturn(validEmployeeAddress);
+        when(addressServiceImpl.findById(Mockito.anyLong())).thenReturn(validEmployeeAddress);
         mockMvc.perform(
                         get("/api/v1/addresses/1")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ public class AddressControllerTest {
 
     @Test
     public void whenGetByInvalidId_thenNotFound() throws Exception {
-        when(addressService.findById(Mockito.anyLong())).thenThrow(BPEntityNotFoundException.class);
+        when(addressServiceImpl.findById(Mockito.anyLong())).thenThrow(BPEntityNotFoundException.class);
         mockMvc.perform(
                         get("/api/v1/addresses/1")
                                 .contentType(MediaType.APPLICATION_JSON))

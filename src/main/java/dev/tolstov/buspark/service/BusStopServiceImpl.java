@@ -24,17 +24,27 @@ import java.util.Objects;
 @Validated
 public class BusStopServiceImpl implements BusStopService {
 
-    @Autowired
-    BusStopRepository busStopRepository;
+    private final BusStopRepository busStopRepository;
+
+    private final AddressServiceImpl addressServiceImpl;
+
+    private final ValidationService validationService;
+
+    private final ValidationUseCaseService validationUseCaseService;
+
 
     @Autowired
-    AddressServiceImpl addressServiceImpl;
-
-    @Autowired
-    ValidationService validationService;
-
-    @Autowired
-    ValidationUseCaseService validationUseCaseService;
+    public BusStopServiceImpl(
+            BusStopRepository busStopRepository,
+            AddressServiceImpl addressServiceImpl,
+            ValidationService validationService,
+            ValidationUseCaseService validationUseCaseService
+    ) {
+        this.busStopRepository = busStopRepository;
+        this.addressServiceImpl = addressServiceImpl;
+        this.validationService = validationService;
+        this.validationUseCaseService = validationUseCaseService;
+    }
 
 
     public BusStop save(BusStop busStop) {

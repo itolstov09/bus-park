@@ -26,13 +26,21 @@ import java.util.Set;
 @Service
 public class JsonService {
 
-    @Autowired
-    ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    @Autowired
-    private AddressServiceImpl addressServiceImpl;
-    @Autowired
-    private BusStopServiceImpl busStopServiceImpl;
+    private final AddressServiceImpl addressServiceImpl;
+
+    private final BusStopServiceImpl busStopServiceImpl;
+
+    public JsonService(
+            ObjectMapper objectMapper,
+            AddressServiceImpl addressServiceImpl,
+            BusStopServiceImpl busStopServiceImpl
+    ) {
+        this.objectMapper = objectMapper;
+        this.addressServiceImpl = addressServiceImpl;
+        this.busStopServiceImpl = busStopServiceImpl;
+    }
 
     private final Set<String> models = Set.of(
             "address",

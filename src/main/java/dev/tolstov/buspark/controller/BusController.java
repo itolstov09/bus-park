@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/buses")
 public class BusController {
 
-    @Autowired
-    BusServiceImpl busServiceImpl;
+    private final BusServiceImpl busServiceImpl;
 
+    @Autowired
+    public BusController(BusServiceImpl busServiceImpl) {
+        this.busServiceImpl = busServiceImpl;
+    }
 
     @GetMapping
     public ResponseEntity<Page<Bus>> getPage(

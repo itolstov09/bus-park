@@ -14,11 +14,15 @@ import java.util.Set;
 
 @Service
 public class ValidationService {
-    @Autowired
-    Validator validator;
+    private final Validator validator;
+
+    private final ValidationUseCaseService validationUseCaseService;
 
     @Autowired
-    ValidationUseCaseService validationUseCaseService;
+    public ValidationService(Validator validator, ValidationUseCaseService validationUseCaseService) {
+        this.validator = validator;
+        this.validationUseCaseService = validationUseCaseService;
+    }
 
 
     public void addressValidation(Address newAddress) {

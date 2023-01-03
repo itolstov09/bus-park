@@ -22,8 +22,12 @@ import java.util.List;
 @RequestMapping("api/v1/employees")
 public class EmployeeController {
 
+    private final EmployeeServiceImpl employeeServiceImpl;
+
     @Autowired
-    EmployeeServiceImpl employeeServiceImpl;
+    public EmployeeController(EmployeeServiceImpl employeeServiceImpl) {
+        this.employeeServiceImpl = employeeServiceImpl;
+    }
 
 
     @GetMapping

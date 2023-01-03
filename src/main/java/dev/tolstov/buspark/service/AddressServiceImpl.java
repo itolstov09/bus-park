@@ -17,11 +17,15 @@ import java.util.List;
 @Service
 public class AddressServiceImpl implements AddressService {
 
-    @Autowired
-    AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
+
+    private final ValidationService validationService;
 
     @Autowired
-    ValidationService validationService;
+    public AddressServiceImpl(AddressRepository addressRepository, ValidationService validationService) {
+        this.addressRepository = addressRepository;
+        this.validationService = validationService;
+    }
 
 
     public Address save(Address newAddress) {

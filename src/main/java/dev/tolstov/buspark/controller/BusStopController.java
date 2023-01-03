@@ -16,8 +16,12 @@ import java.util.List;
 @RequestMapping("api/v1/busStops")
 public class BusStopController {
 
+    private final BusStopServiceImpl busStopServiceImpl;
+
     @Autowired
-    BusStopServiceImpl busStopServiceImpl;
+    public BusStopController(BusStopServiceImpl busStopServiceImpl) {
+        this.busStopServiceImpl = busStopServiceImpl;
+    }
 
 
     @GetMapping

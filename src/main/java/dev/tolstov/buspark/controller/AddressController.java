@@ -14,8 +14,12 @@ import java.util.List;
 @RequestMapping("/api/v1/addresses")
 public class AddressController {
 
+    private final AddressServiceImpl addressServiceImpl;
+
     @Autowired
-    AddressServiceImpl addressServiceImpl;
+    public AddressController(AddressServiceImpl addressServiceImpl) {
+        this.addressServiceImpl = addressServiceImpl;
+    }
 
     @GetMapping
     public ResponseEntity<Page<Address>> getPage(

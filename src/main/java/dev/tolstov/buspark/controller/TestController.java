@@ -11,8 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class TestController {
+    private final JsonService jsonService;
+
     @Autowired
-    JsonService jsonService;
+    public TestController(JsonService jsonService) {
+        this.jsonService = jsonService;
+    }
 
 
     @PostMapping("/loadFromJSON")

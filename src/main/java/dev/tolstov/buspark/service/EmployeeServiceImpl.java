@@ -32,18 +32,26 @@ import java.util.Objects;
 @Validated
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
-    EmployeeRepository employeeRepository;
+    private final EmployeeRepository employeeRepository;
+
+    private final AddressServiceImpl addressServiceImpl;
+
+    private final ValidationService validationService;
+
+    private final ValidationUseCaseService validationUseCaseService;
 
     @Autowired
-    AddressServiceImpl addressServiceImpl;
-
-    @Autowired
-    ValidationService validationService;
-
-    @Autowired
-    ValidationUseCaseService validationUseCaseService;
-
+    public EmployeeServiceImpl(
+            EmployeeRepository employeeRepository,
+            AddressServiceImpl addressServiceImpl,
+            ValidationService validationService,
+            ValidationUseCaseService validationUseCaseService
+    ) {
+        this.employeeRepository = employeeRepository;
+        this.addressServiceImpl = addressServiceImpl;
+        this.validationService = validationService;
+        this.validationUseCaseService = validationUseCaseService;
+    }
 
 
     //TODO убрать. используется только в тестах

@@ -29,17 +29,26 @@ import java.util.Set;
 @Service
 @Validated
 public class BusServiceImpl {
-    @Autowired
-    BusRepository busRepository;
+    private final BusRepository busRepository;
+
+    private final EmployeeServiceImpl employeeServiceImpl;
+
+    private final RouteRepository routeRepository;
+
+    private final ValidationUseCaseService validationUseCaseService;
 
     @Autowired
-    EmployeeServiceImpl employeeServiceImpl;
-
-    @Autowired
-    RouteRepository routeRepository;
-
-    @Autowired
-    ValidationUseCaseService validationUseCaseService;
+    public BusServiceImpl(
+            BusRepository busRepository,
+            EmployeeServiceImpl employeeServiceImpl,
+            RouteRepository routeRepository,
+            ValidationUseCaseService validationUseCaseService
+    ) {
+        this.busRepository = busRepository;
+        this.employeeServiceImpl = employeeServiceImpl;
+        this.routeRepository = routeRepository;
+        this.validationUseCaseService = validationUseCaseService;
+    }
 
 
     @Validated

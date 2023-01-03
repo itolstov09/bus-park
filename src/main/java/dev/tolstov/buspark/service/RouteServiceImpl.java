@@ -24,14 +24,22 @@ import java.util.Set;
 @Service
 public class RouteServiceImpl implements RouteService {
 
-    @Autowired
-    RouteRepository routeRepository;
+    private final RouteRepository routeRepository;
+
+    private final ValidationService validationService;
+
+    private final BusStopServiceImpl busStopServiceImpl;
 
     @Autowired
-    ValidationService validationService;
-
-    @Autowired
-    BusStopServiceImpl busStopServiceImpl;
+    public RouteServiceImpl(
+            RouteRepository routeRepository,
+            ValidationService validationService,
+            BusStopServiceImpl busStopServiceImpl
+    ) {
+        this.routeRepository = routeRepository;
+        this.validationService = validationService;
+        this.busStopServiceImpl = busStopServiceImpl;
+    }
 
 
     public Route save(Route route) {

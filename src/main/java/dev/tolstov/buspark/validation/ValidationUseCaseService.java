@@ -21,8 +21,12 @@ import java.util.Set;
 @Validated
 public class ValidationUseCaseService {
 
+    private final Validator validator;
+
     @Autowired
-    Validator validator;
+    public ValidationUseCaseService(Validator validator) {
+        this.validator = validator;
+    }
 
 
     public void employeeAddressValidation(Address address) {

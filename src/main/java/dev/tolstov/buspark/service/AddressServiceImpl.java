@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -69,7 +70,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Page<Address> getPage(Integer page, @Positive Integer size) {
+    public Page<Address> getPage(@Min(0) Integer page, @Positive Integer size) {
         return addressRepository.findAll(PageRequest.of(page, size));
     }
 

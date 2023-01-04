@@ -114,10 +114,10 @@ public class BusServiceImpl {
     }
 
 
-    public void setDriver(Bus bus, Employee employee) {
-        driverVerification(employee);
-        bus.setDriver(employee);
-    }
+//    public void setDriver(Bus bus, Employee employee) {
+//        driverVerification(employee);
+//        bus.setDriver(employee);
+//    }
 
 
     // TODO перевести в boolean когда потребуется проверка должности механика
@@ -135,18 +135,6 @@ public class BusServiceImpl {
         }
 
     }
-
-    public Bus save(Bus newBus, Employee driver) {
-        setDriver(newBus, driver);
-        return save(newBus);
-    }
-
-    public Bus save(Bus newBus, Employee driver, Set<Employee> mechanics) {
-        setDriver(newBus, driver);
-        newBus.setMechanics(mechanics);
-        return save(newBus);
-    }
-
 
     public Page<Bus> getPage(Integer page, Integer size) {
         return busRepository.findAll(PageRequest.of(page, size));

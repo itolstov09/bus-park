@@ -83,8 +83,4 @@ public class Bus extends BPEntity {
         this.driver = employee;
     }
 
-    public void addMechanic(Employee mechanic) {
-        getMechanics().add(mechanic);
-    }
-
 }

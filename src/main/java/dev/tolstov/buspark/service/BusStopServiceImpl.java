@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -125,7 +126,7 @@ public class BusStopServiceImpl implements BusStopService {
     }
 
     @Override
-    public Page<BusStop> getPage(Integer page, @Positive Integer size) {
+    public Page<BusStop> getPage(@Min(0) Integer page, @Positive Integer size) {
         return busStopRepository.findAll(PageRequest.of(page, size));
     }
 

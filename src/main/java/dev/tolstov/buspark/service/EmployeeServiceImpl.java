@@ -62,11 +62,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     // todo задать вопрос в ТГ чате, как вынести дублированный код в отдельный метод не городя перегрузку
     @Validated
+    @Override
     public Employee createMechanic(@Valid EmployeeMechanicDTO mechanic) {
         return save(mapMechanicDTOtoEmployee(mechanic));
     }
 
     @Validated
+    @Override
     public Employee createDriver(@Valid EmployeeDriverDTO driver) {
         return save(mapDriverDTOToEmployee(driver));
     }
@@ -87,6 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Validated
+    @Override
     public Employee updateDriver(Long id, @Valid EmployeeDriverDTO driver) {
         Employee byId = findById(id);
         if (byId.getPost() != Employee.Post.DRIVER) {
@@ -97,6 +100,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Validated
+    @Override
     public Employee updateMechanic(Long id, @Valid EmployeeMechanicDTO mechanic) {
         Employee byId = findById(id);
         if (byId.getPost() != Employee.Post.MECHANIC) {
@@ -117,6 +121,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.deleteAll();
     }
 
+    @Override
     public Employee findFirstByPost(Employee.Post post) {
         return employeeRepository.findFirstByPost(post);
     }
@@ -169,20 +174,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findAll(PageRequest.of(page, size));
     }
 
+    @Override
     public List<Employee> findByLastName(@NotBlank String lastName) {
         return employeeRepository.findByLastName(lastName);
     }
 
+    @Override
     public List<Employee> findByName(@NotBlank String name) {
         return employeeRepository.findByName(name);
     }
 
+    @Override
     public List<Employee> findByMiddleName(String middleName) {
         return employeeRepository.findByMiddleName(middleName);
     }
 
     @Transactional
     @Validated
+    @Override
     public Integer updateFIO(@Valid EmployeeFIODTO dto, Long id) {
         if (!employeeRepository.existsById(id)) {
             throw new BPEntityNotFoundException(
@@ -198,6 +207,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param homeAddress
      * @param id
      */
+    @Override
     public void editHomeAddress(Address homeAddress, Long id) {
         validationUseCaseService.employeeAddressValidation(homeAddress);
 
@@ -215,6 +225,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Transactional
+    @Override
     public Integer editLicense(DriverLicense license, Long id) {
         validationUseCaseService.driverLicenseValidation(license);
         Employee employee = findById(id);
@@ -223,11 +234,13 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.editLicense(license, id);
     }
 
+    @Override
     public boolean existById(Long id) {
         return employeeRepository.existsById(id);
     }
 
     @Transactional
+    @Override
     public void editPost(
             @ValueOfEnum(enumClass = Employee.Post.class) String newPost,
             @Positive Long id

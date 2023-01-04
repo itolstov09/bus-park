@@ -28,7 +28,7 @@ import java.util.Set;
 
 @Service
 @Validated
-public class BusServiceImpl {
+public class BusServiceImpl implements BusService{
     private final BusRepository busRepository;
 
     private final EmployeeServiceImpl employeeServiceImpl;
@@ -52,6 +52,7 @@ public class BusServiceImpl {
 
 
     @Validated
+    @Override
     public Bus create(@Valid BusDTO bus) {
         Bus entity = new Bus();
         BeanUtils.copyProperties(bus, entity);
@@ -90,6 +91,7 @@ public class BusServiceImpl {
     }
 
     @Validated
+    @Override
     public Bus update(Long id, @Valid BusDTO dto) {
         Bus byId = busRepository.findById(id).orElseThrow(() ->
                 new BPEntityNotFoundException(Bus.class.getSimpleName(), id));
@@ -109,6 +111,7 @@ public class BusServiceImpl {
         busRepository.deleteAll();
     }
 
+    @Override
     public List<Bus> findBusesByMechanicId(Long mechanicId) {
         return busRepository.findBusesByMechanicId(mechanicId);
     }
@@ -141,6 +144,7 @@ public class BusServiceImpl {
     }
 
     @Transactional
+    @Override
     public void addMechanic(@Positive Long mechanicId, @Positive Long busId) {
         checkExistById(busId);
         if (!employeeServiceImpl.existById(mechanicId)) {
@@ -159,12 +163,14 @@ public class BusServiceImpl {
     }
 
     @Transactional
+    @Override
     public void removeMechanic(Long mechanicId, Long busId) {
         checkExistById(busId);
         busRepository.removeMechanic(busId, mechanicId);
     }
 
     @Transactional
+    @Override
     public void setBusDriver(Long driverId, Long busId) {
         Employee driver = employeeServiceImpl.findById(driverId);
         validationUseCaseService.driverValidation(driver);
@@ -181,6 +187,7 @@ public class BusServiceImpl {
     }
 
     @Transactional
+    @Override
     public void setRoute(Long routeId, Long busId) {
         checkExistById(busId);
         if (!routeRepository.existsById(routeId)) {

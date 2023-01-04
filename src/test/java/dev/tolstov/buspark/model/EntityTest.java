@@ -1,12 +1,15 @@
 package dev.tolstov.buspark.model;
 
 import dev.tolstov.buspark.TestEntityService;
+import dev.tolstov.buspark.dto.BusDTO;
 import dev.tolstov.buspark.dto.EmployeeDriverDTO;
 import dev.tolstov.buspark.service.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Set;
 
 @SpringBootTest
 public abstract class EntityTest {
@@ -110,11 +113,23 @@ public abstract class EntityTest {
 
 
         // TODO переписать с использованием CRUD
-//        Bus paz = new Bus("PAZ", "125 TES 92", 20);
-//        busService.save(paz, ivan, Set.of(dmitry, mechanic3));
-//
-//        Bus paz2 = new Bus("PAZ", "045 TES 92", 40);
-//        busService.save(paz2, driver2, Set.of(dmitry, mechanic2));
+        BusDTO pazDTO = new BusDTO();
+        pazDTO.setModel("PAZ");
+        pazDTO.setNumberPlate("125 TES 92");
+        pazDTO.setMaxPassenger(20);
+        Bus paz = busServiceImpl.create(pazDTO);
+        busServiceImpl.setBusDriver(ivan.getId(), paz.getId());
+        busServiceImpl.addMechanic(dmitry.getId(), paz.getId());
+        busServiceImpl.addMechanic(mechanic3.getId(), paz.getId());
+
+        BusDTO paz2DTO = new BusDTO();
+        paz2DTO.setModel("PAZ");
+        paz2DTO.setNumberPlate("045 TES 92");
+        paz2DTO.setMaxPassenger(40);
+        Bus paz2 = busServiceImpl.create(paz2DTO);
+        busServiceImpl.setBusDriver(driver2.getId(), paz2.getId());
+        busServiceImpl.addMechanic(dmitry.getId(), paz2.getId());
+        busServiceImpl.addMechanic(mechanic2.getId(), paz2.getId());
 
     }
 }

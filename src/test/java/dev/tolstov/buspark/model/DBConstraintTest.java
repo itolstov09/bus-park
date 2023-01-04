@@ -4,8 +4,6 @@ import dev.tolstov.buspark.repository.BusRepository;
 import dev.tolstov.buspark.repository.BusStopRepository;
 import dev.tolstov.buspark.repository.EmployeeRepository;
 import dev.tolstov.buspark.repository.RouteRepository;
-import org.junit.Ignore;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,7 +29,6 @@ public class DBConstraintTest extends EntityTest {
 
     //BUS
 
-    @Disabled
     @Test
     void testBusNumberPlateUniqueConstraint() {
         DataIntegrityViolationException violationException = assertThrows(
@@ -48,7 +45,6 @@ public class DBConstraintTest extends EntityTest {
                         .getMessage().contains("bus_number_plate_key") );
     }
 
-    @Disabled
     @Test
     void testBusDriverUniqueConstraint() {
         DataIntegrityViolationException violationException = assertThrows(

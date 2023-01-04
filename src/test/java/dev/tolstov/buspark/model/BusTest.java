@@ -9,10 +9,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityExistsException;
+import javax.validation.ConstraintViolationException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
+//@Disabled
 public class BusTest extends EntityTest {
     @Autowired
     BusRepository busRepository;
@@ -36,32 +37,37 @@ public class BusTest extends EntityTest {
     //      * сотрудника без водительского удостоверения нельзя указать как водителя
     @Test
     void testAddEmployeeWithoutLicenseCannotBeBusDriver() {
-        EmployeeException employeeException = assertThrows(EmployeeException.class,
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class,
                 () -> {
                     Employee employee = employeeServiceImpl.findAll().get(0);
                     employee.setDriverLicense(null);
                     Bus bus = busServiceImpl.findAll().get(0);
-                    busServiceImpl.setDriver(bus, employee);
+                    busServiceImpl.setBusDriver(employee.getId(), bus.getId());
                 });
-        assertTrue(employeeException.getMessage().endsWith("Reason: don't have a license!"));
+        assertEquals("driverLicense: не должно равняться null", exception.getMessage());
     }
 
 //
-    // TODO сменить тест метода на CRUD - set Driver
-//    @Test
-//    void whenSaveBusWithDriverWhosAlreadyDrivesBus_thenThrowsException() {
-//        EmployeeException employeeException = assertThrows(
-//                EmployeeException.class,
-//                () -> {
-//                    Bus bus = busService.findAll().get(0);
-//                    Employee driver = bus.getDriver();
-//                    Bus newBus = new Bus("model", "np", 57);
-//                    newBus.setDriver(driver);
-//                    busService.create(newBus);
-//                }
-//        );
-//        assertTrue( employeeException.getMessage().contains("already drives bus"));
-//    }
+    @Test
+    void whenSaveBusWithDriverWhosAlreadyDrivesBus_thenThrowsException() {
+        EmployeeException exception = assertThrows(
+                EmployeeException.class,
+                () -> {
+                    Bus bus = busServiceImpl.findAll().get(0);
+                    Employee driver = bus.getDriver();
+
+                    BusDTO busDTO = new BusDTO();
+                    busDTO.setModel("model");
+                    busDTO.setNumberPlate("585 TTT 01");
+                    busDTO.setMaxPassenger(57);
+                    Bus newBus = busServiceImpl.create(busDTO);
+
+                    busServiceImpl.setBusDriver(driver.getId(), newBus.getId());
+                }
+        );
+        System.out.println("exc -> " + exception.getMessage());
+        assertTrue( exception.getMessage().contains("already drives bus"));
+    }
 
     //      одним автобусом могут заниматься несколько механиков
     @Test
@@ -80,11 +86,12 @@ public class BusTest extends EntityTest {
         //given
         Employee mechanic = employeeServiceImpl.findFirstByPost(Employee.Post.MECHANIC);
         DriverLicense driverLicense = new DriverLicense("123", "D");
-        mechanic.setDriverLicense(driverLicense);
+        employeeServiceImpl.editLicense(driverLicense, mechanic.getId());
+
         Bus bus = busServiceImpl.findAll().get(0);
         //when
         Employee oldDriver = bus.getDriver();
-        busServiceImpl.setDriver(bus, mechanic);
+        busServiceImpl.setBusDriver(mechanic.getId(), bus.getId());
         //then
         Bus busById = busServiceImpl.findById(bus.getId());
         assertNotEquals(busById.getDriver(), oldDriver);

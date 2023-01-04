@@ -42,6 +42,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    @Override
     public Route save(Route route) {
         validationService.routeValidation(route);
 
@@ -62,6 +63,7 @@ public class RouteServiceImpl implements RouteService {
         return routeRepository.save(route);
         }
 
+    @Override
     public Route save(Route newRoute, Set<BusStop> busStops) {
         newRoute.setBusStops(busStops);
         return routeRepository.save(newRoute);
@@ -81,6 +83,7 @@ public class RouteServiceImpl implements RouteService {
                 );
     }
 
+    @Override
     public Route update(Long id, Route routeInfo) {
         System.out.println("ROUTE UPDATE");
         Route byId = findById(id);
@@ -105,6 +108,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Transactional
+    @Override
     public void addBusStop(@Positive Long busStopId, @Positive Long routeId) {
         checkExistById(routeId);
         if (!busStopServiceImpl.existById(busStopId)) {
@@ -124,6 +128,7 @@ public class RouteServiceImpl implements RouteService {
 
 
     @Transactional
+    @Override
     public void removeBusStop(@Positive Long busStopId, @Positive Long routeId) {
         checkExistById(routeId);
 //        routeRepository.
@@ -131,6 +136,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
+    // todo возможно стоит создать метод в интерфейсе BusParkBaseInterface
     private void checkExistById(Long id) {
         if (!routeRepository.existsById(id)) {
             throw new BPEntityNotFoundException(Route.class.getSimpleName(), id);

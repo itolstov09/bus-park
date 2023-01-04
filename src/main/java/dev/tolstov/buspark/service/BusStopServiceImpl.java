@@ -48,6 +48,7 @@ public class BusStopServiceImpl implements BusStopService {
     }
 
 
+    @Override
     public BusStop save(BusStop busStop) {
         validationService.busStopValidation(busStop);
         //если создание то не должно быть записи с таким же уникальным значением
@@ -108,6 +109,7 @@ public class BusStopServiceImpl implements BusStopService {
                 );
     }
 
+    @Override
     public BusStop update(Long id, BusStop busStopInfo) {
         BusStop busStop = findById(id);
         BeanUtils.copyProperties(busStopInfo, busStop);
@@ -130,12 +132,14 @@ public class BusStopServiceImpl implements BusStopService {
         return busStopRepository.findAll(PageRequest.of(page, size));
     }
 
+    @Override
     public BusStop findByName(@NotBlank String name) {
         return busStopRepository.findOneByName(name).orElseThrow(
                 () -> new BPEntityNotFoundException(BusStop.class.getSimpleName(), name)
         );
     }
 
+    @Override
     public List<BusStop> findByStreet(@NotBlank String street) {
         return busStopRepository.findByAddressStreet(street);
     }
@@ -158,6 +162,7 @@ public class BusStopServiceImpl implements BusStopService {
     }
 
     @Transactional
+    @Override
     public Integer updateAddressStreet(@NotBlank String street, Long id) {
         if (!busStopRepository.existsById(id)) {
             throw new BPEntityNotFoundException(BusStop.class.getSimpleName(), id);
@@ -166,6 +171,7 @@ public class BusStopServiceImpl implements BusStopService {
         return addressServiceImpl.updateStreetAddress(street, addressId);
     }
 
+    @Override
     public boolean existById(Long busStopId) {
         return busStopRepository.existsById(busStopId);
     }

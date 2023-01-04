@@ -29,6 +29,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
 
+    @Override
     public Address save(Address newAddress) {
         validationService.addressValidation(newAddress);
         return addressRepository.save(newAddress);
@@ -46,6 +47,7 @@ public class AddressServiceImpl implements AddressService {
                 () -> new BPEntityNotFoundException(Address.class.getSimpleName(), addressId));
     }
 
+    @Override
     public Address update(Address addressInfo) {
         return save(addressInfo);
     }
@@ -60,25 +62,29 @@ public class AddressServiceImpl implements AddressService {
         addressRepository.deleteAll();
     }
 
+    @Override
     public List<Address> saveAll(Iterable<Address> addressList) {
         return addressRepository.saveAll(addressList);
     }
 
 //   ====================================================================================================
-    public List<Address> findAddresesWithoutApartmentNumber() {
-        return null;
-    }
+    //todo удалить
+//    public List<Address> findAddresesWithoutApartmentNumber() {
+//        return null;
+//    }
 
     @Override
     public Page<Address> getPage(@Min(0) Integer page, @Positive Integer size) {
         return addressRepository.findAll(PageRequest.of(page, size));
     }
 
+    @Override
     @Transactional
     public Integer updateStreetAddress(@NotBlank String street, Long addressId) {
         return addressRepository.updateStreetAddress(street, addressId);
     }
 
+    @Override
     public List<Address> findBusAddresses() {
         return addressRepository.findByApartmentNumberIsNull();
     }

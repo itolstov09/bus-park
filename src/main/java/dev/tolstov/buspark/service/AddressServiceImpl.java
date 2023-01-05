@@ -85,7 +85,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findBusAddresses() {
+    public List<Address> findBusStopAddresses() {
         return addressRepository.findByApartmentNumberIsNull();
     }
 }

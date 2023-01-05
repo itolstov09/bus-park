@@ -12,5 +12,5 @@ public interface AddressService extends BusParkBaseService<Address> {
     List<Address> saveAll(Iterable<Address> addresses);
 //    List<Address> findAddresesWithoutApartmentNumber();
     Integer updateStreetAddress(@NotBlank String street, Long id);
-    List<Address> findBusAddresses();
+    List<Address> findBusStopAddresses();
 }

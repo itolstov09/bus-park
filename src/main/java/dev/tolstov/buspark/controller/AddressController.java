@@ -34,9 +34,9 @@ public class AddressController {
         return ResponseEntity.ok(addressServiceImpl.findById(id));
     }
 
-    @GetMapping("/find-busAddresses")
+    @GetMapping("/find-busStopAddresses")
     public ResponseEntity<?> findAll() {
-        List<Address> addressList = addressServiceImpl.findBusAddresses();
+        List<Address> addressList = addressServiceImpl.findBusStopAddresses();
         if (addressList == null || addressList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

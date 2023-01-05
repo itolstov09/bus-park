@@ -1,6 +1,7 @@
 package dev.tolstov.buspark.service;
 
 import dev.tolstov.buspark.exception.BPEntityNotFoundException;
+import dev.tolstov.buspark.exception.BusStopException;
 import dev.tolstov.buspark.model.Address;
 import dev.tolstov.buspark.model.BusStop;
 import dev.tolstov.buspark.repository.BusStopRepository;
@@ -112,6 +113,12 @@ public class BusStopServiceImpl implements BusStopService {
     @Override
     public BusStop update(Long id, BusStop busStopInfo) {
         BusStop busStop = findById(id);
+        Long addressId = busStopInfo.getAddress().getId();
+        if (addressId != null && addressServiceImpl.findById(addressId).getApartmentNumber() != null) {
+            throw new BusStopException(
+                    String.format("Cannot update bus stop address: address id '%s' is employee address", addressId)
+            );
+        }
         BeanUtils.copyProperties(busStopInfo, busStop);
         return save(busStop);
     }
